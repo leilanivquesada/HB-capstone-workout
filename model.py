@@ -11,7 +11,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    username = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False, unique=True)
     
     def __repr__(self):
         """Show info about the user"""
@@ -130,10 +130,12 @@ class Log(db.Model):
     
     @classmethod
     def update(cls, log_id, exercise_id, new_num_reps, new_weight, new_weight_unit):
+        """update log"""
         log_update = cls.query.get(log_id)
         log_update.num_reps = new_num_reps
         log_update.weight = new_weight
         log_update.weight_unit = new_weight_unit
+        
     @classmethod
     def all_logs(cls):
         """ returns all workouts"""
