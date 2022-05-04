@@ -129,7 +129,7 @@ class Log(db.Model):
         return cls.query.get(log_id)
     
     @classmethod
-    def update(cls, log_id, exercise_id, new_num_reps, new_weight, new_weight_unit)
+    def update(cls, log_id, exercise_id, new_num_reps, new_weight, new_weight_unit):
         log_update = cls.query.get(log_id)
         log_update.num_reps = new_num_reps
         log_update.weight = new_weight
