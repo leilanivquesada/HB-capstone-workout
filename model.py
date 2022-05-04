@@ -34,20 +34,19 @@ class User(db.Model):
     
     @classmethod
     def get_by_email(cls,email):
-        """query by user email"""
+        """queries by user email"""
         return cls.query(User.email == email).first()
-    
     
     @classmethod
     def all_users(cls):
-        """return a list of all users"""
+        """ returns a list of all users"""
         return cls.query.all()
     
 class Exercise(db.Model):
     
-    tablename = "exercises"
+    __tablename__ = "exercises"
     
-    exercise_id = db.Column(db.Integer, autoincrement=True, primary_key= True)
+    exercise_id = db.Column(db.Integer, autoincrement=True, primary_key= True, nullable=False)
     exercise_name = db.Column(db.Text)
     exercise_description = db.Column(db.String)
     exercise_pic_url = db.Column(db.String)
@@ -57,7 +56,7 @@ class Exercise(db.Model):
 
     @classmethod
     def create(cls, exercise_name, exercise_description, exercise_pic_url):
-        """Creates an exercise for the exercise database"""
+        """ creates an exercise for the exercise database"""
         return cls(
             exercise_name=exercise_name, 
             exercise_description=exercise_description, 
@@ -66,28 +65,73 @@ class Exercise(db.Model):
         
     @classmethod
     def all_exercises(cls):
-        """ return all exercises """
+        """ returns all exercises """
         return cls.query.all()
     
     @classmethod
     def get_by_id(cls,exercise_id):
-        """Return an exercise by primary key"""
+        """ returns an exercise by primary key"""
         return cls.query.get(exercise_id)
     
-# class Workout(db.Model):
+class Workout(db.Model):
     
-#     tablename = "workouts"
+    __tablename__ = "workouts"
     
-#     workout_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     date_of_scheduled_workout= db.Column(db.Date, nullable=False)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-#     exercise_id = db.Column(db.Integer, db.ForeignKey('exercises.exercise_id'))
+    workout_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
+    date_of_scheduled_workout= db.Column(db.Date, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     
+    user = db.relationship("User", backref="workouts")
     
-#     user = db.relationship("User", backref="workouts")
-#     exercise = db.relationship("Exercise", backref = "workouts")
+    def __repr__(self):
+        return f'<Workout id={self.workout_id}, date of scheduled workout={self.date_of_scheduled_workout}, user={self.user_id}>'
 
+    @classmethod
+    def create(cls, date_of_scheduled_workout, user):
+        return cls(date_of_scheduled_workout=date_of_scheduled_workout, user=user)
+    
+    @classmethod
+    def get_by_id(cls, workout_id):
+        """ returns a workout by primary key"""
+        return cls.query.get(workout_id)
+    
+    @classmethod
+    def all_workouts(cls):
+        """returns all workouts"""
+        return cls.query.all()
+    
+    
+class Log(db.Model):
+    
+    __tablename__ = 'logs'
+    
+    log_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    workout_id = db.Column(db.Integer, db.ForeignKey('workouts.workout_id'), nullable=False)
+    exercise_id = db.Column(db.Integer, db.ForeignKey('exercises.exercise_id'), nullable=False)
+    num_reps = db.Column(db.Integer)
+    weight = db.Column(db.Float)
+    weight_unit = db.Column(db.String)
+    
+    workout = db.relationship("Workout", backref="logs")
+    exercise = db.relationship("Exercise", backref ="logs")
 
+    def __repr__(self):
+        return f'<Log id={self.log_id}, num_reps={self.num_reps}, weight={self.weight}, weight_unit={self.weight_unit}>'
+
+    @classmethod
+    def create(cls, workout, exercise, num_reps, weight, weight_unit):
+        """ creates a new log"""
+        return cls(workout=workout, exercise=exercise, num_reps=num_reps, weight=weight, weight_unit=weight_unit)
+    
+    @classmethod
+    def get_by_id(cls, log_id):
+        """ returns a single log"""
+        return cls.query.get(log_id)
+    
+    @classmethod
+    def all_logs(cls):
+        """ returns all workouts"""
+        return cls.query.all()
 
 
     
