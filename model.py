@@ -50,6 +50,9 @@ class Exercise(db.Model):
     exercise_name = db.Column(db.Text)
     exercise_description = db.Column(db.String)
     exercise_pic_url = db.Column(db.String)
+    muscle_id = db.Column(db.Integer, db.ForeignKey('muscles.muscle_id'))
+    
+    muscles = db.relationship("Muscle", backref="exercises")
     
     def __repr__(self):
         return f'<Exercise id={self.exercise_id} exercise name={self.exercise_name} description={self.exercise_description}>'
@@ -72,6 +75,11 @@ class Exercise(db.Model):
     def get_by_id(cls,exercise_id):
         """ returns an exercise by primary key"""
         return cls.query.get(exercise_id)
+    
+    @classmethod
+    def get_exercises_by_muscle_id(cls,muscle_id):
+        """returns an exercise by muscle id"""
+        return cls.query.get(muscle_id)
     
 class Workout(db.Model):
     
@@ -101,6 +109,28 @@ class Workout(db.Model):
         return cls.query.all()
     
     
+class Muscle(db.Model):
+    
+    __tablename__ = 'muscles'
+    
+    muscle_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    
+    def __repr__(self):
+        return f'<Muscle id={self.muscle_id}, name={self.name}'
+    
+    @classmethod
+    def get_all_muscles(cls):
+        """returns all muscles"""
+        return cls.query.all()
+    
+    @classmethod
+    def get_muscle_by_id(cls, muscle_id):
+        """returns muscle by muscle id"""
+        return cls.query.get(muscle_id)
+    
+    
+
 class Log(db.Model):
     
     __tablename__ = 'logs'

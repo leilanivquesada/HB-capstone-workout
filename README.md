@@ -15,3 +15,6 @@ create tests
 
 ### My general work plan/estimate for the rest of Sprint 1:
 I have a lot of work to do this week! 
+
+
+<!-- add instructions for folks to access API keys for themselves to make work. what files should look like -->

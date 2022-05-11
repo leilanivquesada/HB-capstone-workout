@@ -1,6 +1,6 @@
 """CRUD Operations"""
 
-from model import db, User, Workout, Exercise, Log, connect_to_db
+from model import db, User, Workout, Exercise, Log, Muscle, connect_to_db
 
 if __name__ == '__main__':
     from server import app
@@ -59,3 +59,15 @@ def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
     log_update.weight = new_weight
     log_update.weight_unit = new_weight_unit
     return log_update
+
+def get_exercise_by_muscle_id(muscle_id):
+    """get list of exercises pertaining to a specific muscle group"""
+    return Exercise.query.get(muscle_id).all()
+
+def get_all_muscles():
+    """get a list of all muscles"""
+    return Muscle.query.get.all()
+
+def get_muscle_by_id(muscle_id):
+    """return a muscle by its id"""
+    return Muscle.query.get(muscle_id)
