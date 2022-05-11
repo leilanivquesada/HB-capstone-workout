@@ -15,7 +15,7 @@ def get_by_user_id(user_id):
     """get user info by user_id"""
     return User.query.get(user_id)
 
-def get_by_email(email):
+def get_user_by_email(email):
     """get user by email"""
     return User.query.get(email)
 

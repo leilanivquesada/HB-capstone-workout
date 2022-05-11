@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block title %}Exercise Details{% endblock %}
+
+{% block body %}
+<h1>{{ exercise.name }}</h1>
+<ul>
+{{ exercise.description }}
+
+
+{% comment %} things to pull: exercise description, exercise id, exercise image,  {% endcomment %}
+{% comment %} form & submit- date to add to workout{% endcomment %}
+</ul>
+
+{% endblock %}

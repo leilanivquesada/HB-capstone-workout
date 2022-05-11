@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+{% block title %}All Exercises{% endblock %}
+
+{% block body %}
+{{exercises}}
+<h1>All Exercises</h1>
+<ul>
+    <a href={{exercises.next}}>View next 20 exercises</a>
+    <ul>
+    {% for exercise in exercises['results'] %}
+        <li>    
+            <p><a href='/exercise_details/{{exercise['id']}}'>{{exercise['name']}}<a></p>
+            <p>{{exercise['muscles']}}</p>
+            <p>{{exercise['equipment']}}
+            <br>
+            
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
