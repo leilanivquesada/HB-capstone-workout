@@ -12,6 +12,7 @@ import server
 os.system('dropdb users')
 os.system('createdb users')
 
+
 model.connect_to_db(server.app)
 model.db.create_all()
 

@@ -19,6 +19,10 @@ def get_user_by_email(email):
     """get user by email"""
     return User.query.get(email)
 
+def get_user_by_username(username):
+    """get user info by username"""
+    return User.query.get(username)
+
 def get_all_users():
     """ return all users """
     return User.query.all()
@@ -39,6 +43,7 @@ def get_exercise_by_id(exercise_id):
 def create_workout(date_of_scheduled_workout, user_id):
     """schedule a workout"""
     new_workout = Workout(date_of_scheduled_workout=date_of_scheduled_workout, user_id=user_id)
+    return new_workout
 
 def get_all_workouts():
     return Workout.query.get.all()
@@ -71,3 +76,8 @@ def get_all_muscles():
 def get_muscle_by_id(muscle_id):
     """return a muscle by its id"""
     return Muscle.query.get(muscle_id)
+
+def create_muscle(name):
+    """create muscle"""
+    new_muscle = Muscle(name=name)
+    return new_muscle

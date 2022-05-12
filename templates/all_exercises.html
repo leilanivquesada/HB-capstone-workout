@@ -2,9 +2,9 @@
 {% block title %}All Exercises{% endblock %}
 
 {% block body %}
-{{exercises}}
 <h1>All Exercises</h1>
 <ul>
+    {# this needs to be turned into an ajax request to refresh with more exercises rather than re-routing #}
     <a href={{exercises.next}}>View next 20 exercises</a>
     <ul>
     {% for exercise in exercises['results'] %}

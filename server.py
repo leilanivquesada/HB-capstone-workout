@@ -58,7 +58,7 @@ def show_movie(exercise_id):
     exercise = crud.get_exercise_by_id(exercise_id)
     return render_template("exercise_details.html", exercise=exercise)
 
-@app.route('/body')
+@app.route('/muscle')
 def show_muscles():
     """Select muscle group to search exercises"""
     url = 'https://wger.de/api/v2/muscle/'
@@ -69,8 +69,27 @@ def show_muscles():
     muscles = response.json()
     
     
-    return render_template("body.html", muscles=muscles)    
+    return render_template("muscle.html", muscles=muscles)    
 
+@app.route('/exercise_details/<muscle_id>')
+def get_exercise_by_muscle_id(muscle_id):
+    """display exercise by muscle_id"""
+    url = f'https://wger.de/api/v2/exercise/?muscles={muscle_id}&language=2'
+    data = '{"key": "value"}'
+    headers = {'Accept': 'application/json',
+               'Authorization': WGER_API_KEY}
+    response = requests.get(url=url, data={}, headers=headers)
+    exercise = response.json()
+    
+    # change this to instead render via a fetch request using javascript
+    return render_template("exercise_details.html", exercise=exercise)
+    
+@app.route('/user_dashboard')
+def display_user_dashboard():
+    """display user dashboard"""
+    # need to make a chart in JS Chart
+    # need to display lists of workouts
+    
     
     
     
@@ -95,12 +114,15 @@ def register_user():
 
     email = request.form.get("email")
     password = request.form.get("password")
+    username = request.form.get("username")
 
-    user = crud.get_user_by_email(email)
-    if user:
+    user_email = crud.get_user_by_email(email)
+    user_username = crud.get_user_by_username(username)
+
+    if user_email or user_username:
         flash("Cannot create an account with that email. Try again.")
     else:
-        user = crud.create_user(email, password)
+        user = crud.create_user(email, password, username)
         db.session.add(user)
         db.session.commit()
         flash("Account created! Please log in.")

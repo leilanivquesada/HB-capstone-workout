@@ -35,7 +35,7 @@ class User(db.Model):
     @classmethod
     def get_by_email(cls,email):
         """queries by user email"""
-        return cls.query(User.email == email).first()
+        return cls.query(email).first()
     
     @classmethod
     def all_users(cls):
@@ -117,7 +117,7 @@ class Muscle(db.Model):
     name = db.Column(db.String, nullable=False)
     
     def __repr__(self):
-        return f'<Muscle id={self.muscle_id}, name={self.name}'
+        return f'<Muscle id={self.muscle_id}, name={self.name}>'
     
     @classmethod
     def get_all_muscles(cls):
@@ -128,6 +128,11 @@ class Muscle(db.Model):
     def get_muscle_by_id(cls, muscle_id):
         """returns muscle by muscle id"""
         return cls.query.get(muscle_id)
+    
+    @classmethod
+    def create_muscle(cls, name):
+        """creates muscle"""
+        return cls(name=name)
     
     
 
@@ -146,7 +151,7 @@ class Log(db.Model):
     exercise = db.relationship("Exercise", backref ="logs")
 
     def __repr__(self):
-        return f'<Log id={self.log_id}, num_reps={self.num_reps}, weight={self.weight}, weight_unit={self.weight_unit}>'
+        return f'<Log id={self.log_id}, workout_id={self.workout_id}, exercise_id={self.exercise_id}, num_reps={self.num_reps}, weight={self.weight}, weight_unit={self.weight_unit}>'
 
     @classmethod
     def create(cls, workout, exercise, num_reps, weight, weight_unit):

@@ -3,11 +3,10 @@
 
 {% block body %}
 <h1>What muscle group would you like to work out today?</h1>
-{{muscles}}
     <ul>
     {% for muscle in muscles['results'] %}
         <li>    
-            <p><a href='/exercise_details/?muscle={{muscle['id']}}'>{{muscle['name']}}<a></p>
+            <p><a href="/exercise_details/{{muscle['id']}}" class="muscle_id" id={{muscle['id']}}>{{muscle['name']}}<a></p>
         </li>
     {% endfor %}
     </ul>    

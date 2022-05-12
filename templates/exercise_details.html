@@ -2,13 +2,14 @@
 {% block title %}Exercise Details{% endblock %}
 
 {% block body %}
-<h1>{{ exercise.name }}</h1>
-<ul>
-{{ exercise.description }}
+<h1>Exercises</h1>
 
+{% for result in exercise['results']%}
+    <div>
+        <h3>{{ result['name'] }}</h3>
+        <div>{{ result['description']| safe }}</div>
 
-{% comment %} things to pull: exercise description, exercise id, exercise image,  {% endcomment %}
-{% comment %} form & submit- date to add to workout{% endcomment %}
-</ul>
+    </div>
+{% endfor %}
 
 {% endblock %}
