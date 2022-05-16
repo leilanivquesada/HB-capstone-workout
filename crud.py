@@ -46,15 +46,15 @@ def create_workout(date_of_scheduled_workout, user_id):
     return new_workout
 
 def get_all_workouts():
-    return Workout.query.get.all()
+    return Workout.query.all()
 
 def get_all_workouts_by_user_id(user_id):
     """get all workouts for a particular user"""
-    return Workout.query.get(user_id).all()
+    return Workout.query.filter_by(user_id=user_id).all()
 
 def get_user_workout_by_date(date_of_scheduled_workout, user_id):
     """get workout for user on scheduled date"""
-    return Workout.query.filter(date_of_scheduled_workout, user_id).all()
+    return Workout.query.filter_by(date_of_scheduled_workout=date_of_scheduled_workout, user_id=user_id).first()
 
 def create_new_log(workout_id, exercise_id, num_reps, weight, weight_unit):
     """create a new log to add to the workout"""
@@ -68,6 +68,18 @@ def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
     log_update.weight = new_weight
     log_update.weight_unit = new_weight_unit
     return log_update
+
+def view_all_logs():
+    """view all workout logs"""
+    return Log.query.all()
+
+def view_all_logs_by_user_id(user_id):
+    """view all logs for a user"""
+    return Log.query.filter_by(user_id=user_id)
+
+def view_all_logs_by_user_by_workout(user_id, workout_id):
+    """view all logs for a user and date"""
+    return Log.query.filter_by(user_id=user_id, workout_id=workout_id)
 
 def get_exercise_by_muscle_id(muscle_id):
     """get list of exercises pertaining to a specific muscle group"""

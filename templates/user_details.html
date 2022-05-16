@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% block title %}All_Users{% endblock %}
+
+{% block body %}
+<h1>User Details</h1>
+<ul>
+    {% for workout in user.workouts %}
+        <li>
+            {{ workout.date_of_scheduled_workout}}
+            
+            
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

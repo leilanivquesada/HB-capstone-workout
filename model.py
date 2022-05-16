@@ -46,7 +46,7 @@ class Exercise(db.Model):
     
     __tablename__ = "exercises"
     
-    exercise_id = db.Column(db.Integer, autoincrement=True, primary_key= True, nullable=False)
+    exercise_id = db.Column(db.Integer, primary_key= True, nullable=False)
     exercise_name = db.Column(db.Text)
     exercise_description = db.Column(db.String)
     exercise_pic_url = db.Column(db.String)
@@ -86,7 +86,7 @@ class Workout(db.Model):
     __tablename__ = "workouts"
     
     workout_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
-    date_of_scheduled_workout= db.Column(db.Date, nullable=False, primary_key=True, unique=True)
+    date_of_scheduled_workout= db.Column(db.Date, nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     
     user = db.relationship("User", backref="workouts")

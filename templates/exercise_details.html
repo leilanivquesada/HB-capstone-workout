@@ -4,19 +4,28 @@
 {% block body %}
 <h1>Exercises</h1>
 <div class="container" id="container">
-{% for result in exercise['results']%}
-    <div class="exercise-details">
+{% for i in range(0, length)%}
+    <div class="exercise-details" id="{{i}}">
         <div class="exercise-name">
             <h3>
-                {{ result['name'] }}
+                {{ exercise['results'][i]['name'] }}
             </h3>
         </div>
-        <div class="exercise-description" id={{result['id']}}>
-            {{ result['description']| safe }}
+        <div class="exercise-description" id="description-{{exercise['results'][i]['id']}}">
+            {{ exercise['results'][i]['description']| safe }}
         </div>
-        <form action"/
-
+        <div class="add-to-workout">
+            <form action"/add_to_workout" method="POST">
+                {# form with hidden fields, populate with needed info from the api- field for exercise_id, description, name #}
+                <label for="database items"></label>
+                <input type="hidden" name="exercise_name" value="{{exercise['results'][i]['name']}}">
+                <input type="hidden" name="exercise_description" value="{{exercise['results'][i]['description']}}">
+                <input type="hidden" name="exercise_id" value="{{exercise['results'][i]['id']}}">
+                <label for="add-to-workout">Add to Workout Scheduled {{session['workout']}}</label>
+                <input type="submit" name="index_value">
+            </form>
+        </div>
     </div>
 {% endfor %}
 </div>
-{% endblock %}
+{% endblock %}  

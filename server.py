@@ -38,7 +38,7 @@ def all_exercises():
     return render_template("all_exercises.html", exercises=exercises)
 
 @app.route('/exercises/<exercise_id>')
-def show_movie(exercise_id):
+def show_exercise(exercise_id):
     """Show details on a particular exercise."""
     # url = f''
     
@@ -67,9 +67,14 @@ def get_exercise_by_muscle_id(muscle_id):
                'Authorization': WGER_API_KEY}
     response = requests.get(url=url, data={}, headers=headers)
     exercise = response.json()
+    results = exercise['results']
+    length = len(results)
+    
+    session["muscle_id"] = muscle_id
+    session.modified = True
     
     # change this to instead render via a fetch request using javascript
-    return render_template("exercise_details.html", exercise=exercise)
+    return render_template("exercise_details.html", exercise=exercise, length=length)
     
     
 #TODO create route to CREATE workout by scheduling workout
@@ -78,19 +83,22 @@ def get_exercise_by_muscle_id(muscle_id):
 #
 
 #TODO
-@app.route("/schedule_workout", methods=["POST","GET"])
+@app.route("/schedule_workout", methods=["POST"])
 def create_workout():
     """Create a new workout."""
-    """TODO create a button to schedule a date to workout in the user dashboard"""
+    # import pdb; pdb.set_trace()
 
-    date = request.form.get("date")
+    date = request.form.get("cal-to-schedule-workout")
     user_email = session["user_email"]
+    
     user = crud.get_user_by_email(user_email)
     user_id = user.user_id
+    
     workout = crud.get_user_workout_by_date(date, user_id)
-
+    session["workout"] = date
+    # TODO make sure only one workout in session, check your notes
     if workout:
-        flash("Workout exists! Edit the workout by adding exercises.", 'alert alert-danger')
+        flash("Workout already exists! Edit the workout by adding exercises.", 'alert alert-danger')
     else:
         workout = crud.create_workout(date, user_id)
         db.session.add(workout)
@@ -99,33 +107,68 @@ def create_workout():
 
     return redirect("/muscle")
 
-
-
 @app.route('/user_dashboard')
 def display_user_dashboard():
     """display user dashboard"""
     #TODO need to make a chart in JS Chart
     #TODO need to display lists of workouts
         # Pull random bodybuilding quote from API to greet user at user_dashboard
-      
-    # if session.get("email") is None:
-    #     flash("You need to log in first", 'alert alert-danger')
-    #     return redirect("/")
-    # else:
+    #TODO why isn't username displaying in dashboard? Error 'user' is undefined 
     user_email = session["user_email"]
     user = crud.get_user_by_email(user_email)
     username = user.username  
     
-    url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
-    headers = {
-    "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
-    "X-RapidAPI-Key": BB_QUOTES_API_KEY
-}
-    bb_quote_response = requests.request("GET", url, headers=headers)
-    bb_data = bb_quote_response.json()
+#     url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
+#     headers = {
+#     "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
+#     "X-RapidAPI-Key": BB_QUOTES_API_KEY
+# }
+#     bb_quote_response = requests.request("GET", url, headers=headers)
+#     bb_data = bb_quote_response.json()
     
     # return render_template("/user_dashboard.html", bb_data=bb_data)
     return render_template("/user_dashboard.html")
+
+#TODO: POST: add exercises to workout by making new Logs
+#TODO: VIEW/GET: view all exercises in a given workout when workout is clicked (view Logs)
+#TODO: VIEW all workouts for user in a list
+  
+    
+@app.route('/add_to_workout', methods=["POST"])
+def add_exercise_to_workout():
+    """add exercise to workout by creating a new log"""
+    index_of_exercise = request.form.get("index_value")
+    flash(f'{index_of_exercise}')
+    muscle_id = session["muscle_id"]
+    date = session["date"]
+    email = session["email"]
+    user_id = crud.get_user_by_email(email)
+    
+    """check for exercise and/or create new exercise in db"""
+    exercise_name= request.form.get("exercise_name")
+    exercise_description = request.form.get("exercise_description")
+    exercise_id=request.form.get("exercise_id")
+    flash(f'{exercise_name}, {exercise_description}, {exercise_id}')
+    
+    
+    
+    
+    
+    
+    # workout_id = crud.get_user_workout_by_date(date_of_scheduled_workout=date, user_id=user_id)
+    # new_log = crud.create_new_log(workout_id=workout_id, exercise_id=exercise_id, )
+# index of exercise, add to exercise log
+# send to server the exercise and exercise id
+# use crud new log function to create new log
+# flash that it's added
+# return redirect to same page
+    return redirect('/exercise_details/')
+
+
+
+
+
+
     
 @app.route('/login', methods=["POST"])
 def process_login():
@@ -170,18 +213,17 @@ def register_user():
 
     return redirect("/")
     
-# @app.route('/users')
-# def all_users():
-#     """"View all users"""
-#     users = crud.get_users()
-#     return render_template("all_users.html",users=users)
+@app.route('/users')
+def all_users():
+    """"View all users"""
+    users = crud.get_all_users()
+    return render_template("all_users.html",users=users)
 
-# #TODO for some reason would not route to USERS, so changed to user. unsure what is causing this
-# @app.route('/user/<user_id>')
-# def show_users(user_id):
-#     """Show details on a particular user"""
-#     user = crud.get_user_by_id(user_id)
-#     return render_template("user_details.html",user=user)
+@app.route('/user/<user_id>')
+def show_users(user_id):
+    """Show details on a particular user"""
+    user = crud.get_by_user_id(user_id)
+    return render_template("user_details.html",user=user)
     
 @app.route("/logout")
 def logout():
