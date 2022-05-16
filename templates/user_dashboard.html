@@ -2,15 +2,53 @@
 {% block title %}User Dashboard{% endblock %}
 
 {% block body %}
-<h1>User Dashboard</h1>
+<h1>Dashboard</h1>
 {# JS Chart will show with drop down of previously done exercises#}
 {# Will have links to navigate around #}
 {# API Bodybuilder quote here #}
-<h2>Navigation</h2>
-<ul>
-    <li><a href="/workout_log">Log workout</a></li>
-    <li><a href="/all_exercises">View all exercises</a></li>
-    <li><a href="/muscle">View muscle list</a></li>
-    <li><a href="/dashboard">View all users</a></li>
-</ul>
+
+<div class="container-fluid">
+    <div class="nav-bar">
+        <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link active" href="/schedule_workout" id="schedule-workout-link">Schedule Workout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/workout_log" id="workout-log">Log Workout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/muscle" id="muscle">Add Exercises</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout" id="logout">Log Out</a>
+        </li>  
+        </ul>
+    </div>
+    </div>
+      
+<div class="container-fluid" id="dashboard">
+</div>
+<div class="container-fluid" id="body">
+    <form action="/schedule_workout">
+        <label for="schedule-workout">
+            Schedule Workout
+        </label>
+        <input type="date" id="cal-to-schedule-workout" name="schedule-workout">
+        <p><button>Submit</button></p>
+    </form>
+</div>
+<div class="container-fluid" id="container">
+    <div class="body-builder-quote">
+      <p id="body-builder-quote">
+        {#"{{ bb_data['quote']}}#}
+        {#-{{ bb_data['author']}}#}
+        
+        
+      <p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/user_dashboard.jsx" type="text/jsx"></script>
 {% endblock %}

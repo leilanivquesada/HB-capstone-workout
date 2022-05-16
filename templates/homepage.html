@@ -2,47 +2,47 @@
 {% block title %}Exercises Home{% endblock %}
 
 {% block body %}
-<h1>Welcome</h1>
-"{{ bb_data['quote']}}"
--{{ bb_data['author']}}
 
-<h2>Navigation</h2>
-<ul>
-    <li><a href="/all_exercises">View all exercises</a></li>
-    <li><a href="/dashboard">Go to user dashboard</a></li>
-    <li><a href="/muscle">View muscle list</a></li>
-</ul>
 
-<h2>Create an Account</h2>
-  <form action="/users" method="POST">
-    <p>
-      Email <input type="text" name="email">
-    </p>
+<div class="title-block">
+  <h1>Workout Log<h1>
+</div>
+<div class="log-container" id="log-container">
+  <div class="form-container sign-up-container">
+    <form action="/users" method="POST">
+      <h1>Create an Account</h1>
+      <input type="email" aria-label="email" name="email" placeholder="email" />
+      <input type="password" aria-label="password" name="password" placeholder="password" />
+      <input type="username" aria-label="username" name="username" placeholder="username" />
+      <button>Sign Up</button>
+    </form>
+  </div>
+  <div class="form-container sign-in-container">
+    <form action="/login" method="POST">
+        <h1>Log In</h1>
+        <input type="email" name="email" aria-label="Email" placeholder="Email" />
+        <input type="password" name="password" aria-label="Password" placeholder="Password" />
+        <button>Sign In</button>
+    </form>
+  </div>
+  {# <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+          <h1>Welcome Back!</h1>
+          <p>
+              To create and view your workouts, please log in with your credentials
+          </p>
+          <button class="ghost" id="signIn">Sign In</button>
+      </div>
+      <div class="overlay-panel overlay-right">
+          <h1>Hello There!</h1>
+          <p>Start tracking your exercise progress by signing up</p>
+          <button class="ghost" id="signUp">Sign Up</button>
+      </div>
+    </div>
+  </div> #}
+</div>
 
-    <p>
-      Password <input type="password" name="password">
-    </p>
-    
-    <p>
-        Username <input type="username" name="username">
-    </p>
-    <p>
-      <input type="submit">
-    </p>
-  </form>
 
-  <h2>Log In</h2>
-  <form action="/login" method="POST">
-    <p>
-      Email <input type="text" name="email">
-    </p>
 
-    <p>
-      Password <input type="password" name="password">
-    </p>
-
-    <p>
-      <input type="submit">
-    </p>
-  </form>
 {% endblock %}

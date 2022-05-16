@@ -30,7 +30,7 @@ class User(db.Model):
     @classmethod
     def get_by_username(cls, username):
         """get by username"""
-        return cls.query.get(username)
+        return cls.query.query(username).first()
     
     @classmethod
     def get_by_email(cls,email):
@@ -86,7 +86,7 @@ class Workout(db.Model):
     __tablename__ = "workouts"
     
     workout_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
-    date_of_scheduled_workout= db.Column(db.Date, nullable=False)
+    date_of_scheduled_workout= db.Column(db.Date, nullable=False, primary_key=True, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     
     user = db.relationship("User", backref="workouts")

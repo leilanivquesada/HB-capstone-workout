@@ -17,11 +17,11 @@ def get_by_user_id(user_id):
 
 def get_user_by_email(email):
     """get user by email"""
-    return User.query.get(email)
+    return User.query.filter(User.email == email).first()
 
 def get_user_by_username(username):
     """get user info by username"""
-    return User.query.get(username)
+    return User.query.filter(User.username == username).first()
 
 def get_all_users():
     """ return all users """
@@ -52,6 +52,10 @@ def get_all_workouts_by_user_id(user_id):
     """get all workouts for a particular user"""
     return Workout.query.get(user_id).all()
 
+def get_user_workout_by_date(date_of_scheduled_workout, user_id):
+    """get workout for user on scheduled date"""
+    return Workout.query.filter(date_of_scheduled_workout, user_id).all()
+
 def create_new_log(workout_id, exercise_id, num_reps, weight, weight_unit):
     """create a new log to add to the workout"""
     new_log = Log(workout_id=workout_id, exercise_id=exercise_id, num_reps=num_reps, weight=weight, weight_unit=weight_unit)
@@ -67,7 +71,7 @@ def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
 
 def get_exercise_by_muscle_id(muscle_id):
     """get list of exercises pertaining to a specific muscle group"""
-    return Exercise.query.get(muscle_id).all()
+    return Exercise.query.filter(muscle_id=muscle_id).all()
 
 def get_all_muscles():
     """get a list of all muscles"""

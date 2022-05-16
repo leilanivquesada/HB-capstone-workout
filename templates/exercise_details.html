@@ -3,13 +3,20 @@
 
 {% block body %}
 <h1>Exercises</h1>
-
+<div class="container" id="container">
 {% for result in exercise['results']%}
-    <div>
-        <h3>{{ result['name'] }}</h3>
-        <div>{{ result['description']| safe }}</div>
+    <div class="exercise-details">
+        <div class="exercise-name">
+            <h3>
+                {{ result['name'] }}
+            </h3>
+        </div>
+        <div class="exercise-description" id={{result['id']}}>
+            {{ result['description']| safe }}
+        </div>
+        <form action"/
 
     </div>
 {% endfor %}
-
+</div>
 {% endblock %}

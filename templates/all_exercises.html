@@ -9,9 +9,7 @@
     <ul>
     {% for exercise in exercises['results'] %}
         <li>    
-            <p><a href='/exercise_details/{{exercise['id']}}'>{{exercise['name']}}<a></p>
-            <p>{{exercise['muscles']}}</p>
-            <p>{{exercise['equipment']}}
+            <p><a href='/exercise_details/?exercise_id={{exercise['id']}}'>{{exercise['name']}}<a></p>
             <br>
             
         </li>

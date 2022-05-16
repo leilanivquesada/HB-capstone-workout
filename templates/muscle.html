@@ -6,7 +6,8 @@
     <ul>
     {% for muscle in muscles['results'] %}
         <li>    
-            <p><a href="/exercise_details/{{muscle['id']}}" class="muscle_id" id={{muscle['id']}}>{{muscle['name']}}<a></p>
+            <div class="muscle-{{muscle['id']}}">
+                <a href="/exercise_details/{{muscle['id']}}" class="muscle_id" id={{muscle['id']}}>{{muscle['name']}}<a></p>
         </li>
     {% endfor %}
     </ul>    

@@ -19,22 +19,11 @@ WGER_API_KEY = os.environ['WGER_API_KEY']
 
 
 @app.route('/')
-def homepage():
-    # Pull random bodybuilding quote from API to greet user at homepage
-    url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
-    headers = {
-	"X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
-	"X-RapidAPI-Key": BB_QUOTES_API_KEY
-}
-    bb_quote_response = requests.request("GET", url, headers=headers)
-    bb_data = bb_quote_response.json()
+def render_homepage():
+    """render the initial page."""
+    return render_template('homepage.html')
 
-    
-    return render_template('homepage.html',
-                           bb_data=bb_data
-                           )
-
-@app.route('/all_exercises')
+@app.route('/all-exercises')
 def all_exercises():
     """View all exercises"""
     
@@ -52,8 +41,6 @@ def all_exercises():
 def show_movie(exercise_id):
     """Show details on a particular exercise."""
     # url = f''
-    
-    
     
     exercise = crud.get_exercise_by_id(exercise_id)
     return render_template("exercise_details.html", exercise=exercise)
@@ -84,14 +71,61 @@ def get_exercise_by_muscle_id(muscle_id):
     # change this to instead render via a fetch request using javascript
     return render_template("exercise_details.html", exercise=exercise)
     
+    
+#TODO create route to CREATE workout by scheduling workout
+    #TODO create exercises 
+#TODO add route to VIEW workout
+#
+
+#TODO
+@app.route("/schedule_workout", methods=["POST","GET"])
+def create_workout():
+    """Create a new workout."""
+    """TODO create a button to schedule a date to workout in the user dashboard"""
+
+    date = request.form.get("date")
+    user_email = session["user_email"]
+    user = crud.get_user_by_email(user_email)
+    user_id = user.user_id
+    workout = crud.get_user_workout_by_date(date, user_id)
+
+    if workout:
+        flash("Workout exists! Edit the workout by adding exercises.", 'alert alert-danger')
+    else:
+        workout = crud.create_workout(date, user_id)
+        db.session.add(workout)
+        db.session.commit()
+        flash("Workout added! Start adding exercises.", 'alert alert-success')
+
+    return redirect("/muscle")
+
+
+
 @app.route('/user_dashboard')
 def display_user_dashboard():
     """display user dashboard"""
-    # need to make a chart in JS Chart
-    # need to display lists of workouts
+    #TODO need to make a chart in JS Chart
+    #TODO need to display lists of workouts
+        # Pull random bodybuilding quote from API to greet user at user_dashboard
+      
+    # if session.get("email") is None:
+    #     flash("You need to log in first", 'alert alert-danger')
+    #     return redirect("/")
+    # else:
+    user_email = session["user_email"]
+    user = crud.get_user_by_email(user_email)
+    username = user.username  
     
+    url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
+    headers = {
+    "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
+    "X-RapidAPI-Key": BB_QUOTES_API_KEY
+}
+    bb_quote_response = requests.request("GET", url, headers=headers)
+    bb_data = bb_quote_response.json()
     
-    
+    # return render_template("/user_dashboard.html", bb_data=bb_data)
+    return render_template("/user_dashboard.html")
     
 @app.route('/login', methods=["POST"])
 def process_login():
@@ -101,12 +135,19 @@ def process_login():
     password = request.form.get("password")
     
     user = crud.get_user_by_email(email)
-    if not user or user.password != password: 
-        flash("The email or password you entered is incorrect.")
+    username = user.username
+    
+    if email == "":
+        flash("Please enter an email and password to log in", 'alert alert-danger')
+        return redirect("/")
+    elif not user or user.password != password: 
+        flash("The email or password you entered is incorrect.", 'alert alert-danger')
+        return redirect("/")
     else: 
         session["user_email"] = user.email
-        flash(f"welcome back, {user.username}!")
-    return redirect("/")
+        flash(f"Welcome back, {user.username}!", 'alert alert-success')
+        return redirect("/user_dashboard")
+    
 
 @app.route("/users", methods=["POST"])
 def register_user():
@@ -120,12 +161,12 @@ def register_user():
     user_username = crud.get_user_by_username(username)
 
     if user_email or user_username:
-        flash("Cannot create an account with that email. Try again.")
+        flash("Cannot create an account. The email or username is already in use. Try again.", 'alert alert-danger')
     else:
         user = crud.create_user(email, password, username)
         db.session.add(user)
         db.session.commit()
-        flash("Account created! Please log in.")
+        flash("Account created! Please log in.", 'alert alert-success')
 
     return redirect("/")
     
@@ -142,6 +183,14 @@ def register_user():
 #     user = crud.get_user_by_id(user_id)
 #     return render_template("user_details.html",user=user)
     
+@app.route("/logout")
+def logout():
+    """Log user out."""
+    session.pop(session["user_email"], None)
+    flash("Successfully logged out", 'alert alert-success')
+    return redirect("/")
+
+
 
 
 if __name__ == "__main__":
