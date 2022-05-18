@@ -1,0 +1,27 @@
+{% extends 'base.html'%}
+{% block title %}Exercise Details{% endblock %}
+
+{% block body %}
+
+
+
+<div class="container" id="container">
+    {% for result in exercise['results'] %}
+        <div class="exercise-details" id="{{result['id']}}">
+            <div class="exercise-name">
+                <h3>
+                    {{result['name']}}
+                </h3>
+            </div>
+            <div class="exercise-description">
+                {{ result['description'] | safe }}
+            </div>
+            <form action="/add_to_workout" method="POST">
+                <button class="add-to-workout" id="{{ result['id'] }}"> Add to Workout Scheduled {{session['workout']}} </button>
+            <form>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+

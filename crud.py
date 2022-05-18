@@ -6,6 +6,8 @@ if __name__ == '__main__':
     from server import app
     connect_to_db(app)
     
+"""Users CRUD Operations"""
+    
 def create_user(email, password, username):
     """ create a new user """
     user = User(email=email, password=password, username=username)
@@ -27,18 +29,26 @@ def get_all_users():
     """ return all users """
     return User.query.all()
 
-def create_exercise(exercise_name, exercise_description, exercise_pic_url):
+"""Exercise CRUD Operations"""
+
+def create_exercise(exercise_id, exercise_name, exercise_description):
     """ create a new exercise """
-    new_exercise = Exercise(exercise_name=exercise_name, exercise_description=exercise_description, exercise_pic_url=exercise_pic_url)
+    new_exercise = Exercise(exercise_id=exercise_id, exercise_name=exercise_name, exercise_description=exercise_description)
     return new_exercise
 
 def get_all_exercises():
     """ return all exercises """
     return Exercise.query.all()
 
-def get_exercise_by_id(exercise_id):
+def get_exercise_by_id(id):
     """return an exercise by exercise_id"""
-    return Exercise.query.get(exercise_id)
+    return Exercise.query.get(id)
+
+def get_exercise_by_API_id(exercise_id):
+    """return an exercise by exercise_id"""
+    return Exercise.query.filter_by(exercise_id=exercise_id)
+
+"""Workout CRUD Operations"""
 
 def create_workout(date_of_scheduled_workout, user_id):
     """schedule a workout"""
@@ -56,9 +66,9 @@ def get_user_workout_by_date(date_of_scheduled_workout, user_id):
     """get workout for user on scheduled date"""
     return Workout.query.filter_by(date_of_scheduled_workout=date_of_scheduled_workout, user_id=user_id).first()
 
-def create_new_log(workout_id, exercise_id, num_reps, weight, weight_unit):
+def create_new_log(workout_id, exercise_id):
     """create a new log to add to the workout"""
-    new_log = Log(workout_id=workout_id, exercise_id=exercise_id, num_reps=num_reps, weight=weight, weight_unit=weight_unit)
+    new_log = Log(workout_id=workout_id, exercise_id=exercise_id)
     return new_log
 
 def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
@@ -68,6 +78,8 @@ def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
     log_update.weight = new_weight
     log_update.weight_unit = new_weight_unit
     return log_update
+
+"""Log CRUD operations"""
 
 def view_all_logs():
     """view all workout logs"""
@@ -81,6 +93,9 @@ def view_all_logs_by_user_by_workout(user_id, workout_id):
     """view all logs for a user and date"""
     return Log.query.filter_by(user_id=user_id, workout_id=workout_id)
 
+
+"""Muscles CRUD operations"""
+
 def get_exercise_by_muscle_id(muscle_id):
     """get list of exercises pertaining to a specific muscle group"""
     return Exercise.query.filter(muscle_id=muscle_id).all()
@@ -89,11 +104,20 @@ def get_all_muscles():
     """get a list of all muscles"""
     return Muscle.query.get.all()
 
-def get_muscle_by_id(muscle_id):
+def get_muscle_by_id(id):
     """return a muscle by its id"""
-    return Muscle.query.get(muscle_id)
+    return Muscle.query.get(id)
 
-def create_muscle(name):
+def get_muscle_by_api_id(muscle_id):
+    """return a muscle by its api id"""
+    return Muscle.query.filter_by(muscle_id=muscle_id).first()
+
+def create_muscle(muscle_id, name, en_name):
     """create muscle"""
-    new_muscle = Muscle(name=name)
+    new_muscle = Muscle(muscle_id=muscle_id, name=name, en_name=en_name)
+    return new_muscle
+
+def create_muscle_no_en(muscle_id, name):
+    """create muscle"""
+    new_muscle = Muscle(muscle_id=muscle_id, name=name)
     return new_muscle

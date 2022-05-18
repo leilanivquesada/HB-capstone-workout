@@ -46,7 +46,9 @@ class Exercise(db.Model):
     
     __tablename__ = "exercises"
     
-    exercise_id = db.Column(db.Integer, primary_key= True, nullable=False)
+    id = db.Column(db.Integer, primary_key= True, nullable=False)
+    # exercise_id corresponds to wger API exercise_id
+    exercise_id = db.Column(db.Integer, nullable=False, unique=True)
     exercise_name = db.Column(db.Text)
     exercise_description = db.Column(db.String)
     exercise_pic_url = db.Column(db.String)
@@ -55,12 +57,14 @@ class Exercise(db.Model):
     muscles = db.relationship("Muscle", backref="exercises")
     
     def __repr__(self):
-        return f'<Exercise id={self.exercise_id} exercise name={self.exercise_name} description={self.exercise_description}>'
+        return f'<id={self.id} API exercise id={self.exercise_id} exercise name={self.exercise_name} description={self.exercise_description}>'
 
     @classmethod
-    def create(cls, exercise_name, exercise_description, exercise_pic_url):
+    def create(cls, id, exercise_id, exercise_name, exercise_description, exercise_pic_url):
         """ creates an exercise for the exercise database"""
         return cls(
+            id=id,
+            exercise_id=exercise_id, 
             exercise_name=exercise_name, 
             exercise_description=exercise_description, 
             exercise_pic_url=exercise_pic_url
@@ -72,9 +76,9 @@ class Exercise(db.Model):
         return cls.query.all()
     
     @classmethod
-    def get_by_id(cls,exercise_id):
+    def get_by_id(cls,id):
         """ returns an exercise by primary key"""
-        return cls.query.get(exercise_id)
+        return cls.query.get(id)
     
     @classmethod
     def get_exercises_by_muscle_id(cls,muscle_id):
@@ -113,11 +117,13 @@ class Muscle(db.Model):
     
     __tablename__ = 'muscles'
     
-    muscle_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    muscle_id = db.Column(db.Integer, nullable=False, unique=True)
     name = db.Column(db.String, nullable=False)
+    en_name = db.Column(db.String)
     
     def __repr__(self):
-        return f'<Muscle id={self.muscle_id}, name={self.name}>'
+        return f'<Muscle id={self.muscle_id}, name={self.name} en_name = {self.en_name}>'
     
     @classmethod
     def get_all_muscles(cls):
@@ -130,10 +136,14 @@ class Muscle(db.Model):
         return cls.query.get(muscle_id)
     
     @classmethod
-    def create_muscle(cls, name):
+    def create_muscle(cls, id, muscle_id, name, en_name):
         """creates muscle"""
-        return cls(name=name)
+        return cls(id=id, muscle_id=muscle_id, name=name, en_name=en_name)
     
+    @classmethod
+    def create_muscle_no_en(cls, muscle_id, name):
+        """creates muscle"""
+        return cls(muscle_id=muscle_id, name=name)
     
 
 class Log(db.Model):
@@ -164,7 +174,7 @@ class Log(db.Model):
         return cls.query.get(log_id)
     
     @classmethod
-    def update(cls, log_id, exercise_id, new_num_reps, new_weight, new_weight_unit):
+    def update(cls, log_id, new_num_reps, new_weight, new_weight_unit):
         """update log"""
         log_update = cls.query.get(log_id)
         log_update.num_reps = new_num_reps
