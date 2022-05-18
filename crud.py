@@ -66,6 +66,8 @@ def get_user_workout_by_date(date_of_scheduled_workout, user_id):
     """get workout for user on scheduled date"""
     return Workout.query.filter_by(date_of_scheduled_workout=date_of_scheduled_workout, user_id=user_id).first()
 
+"""Log CRUD operations"""
+
 def create_new_log(workout_id, exercise_id):
     """create a new log to add to the workout"""
     new_log = Log(workout_id=workout_id, exercise_id=exercise_id)
@@ -78,8 +80,6 @@ def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
     log_update.weight = new_weight
     log_update.weight_unit = new_weight_unit
     return log_update
-
-"""Log CRUD operations"""
 
 def view_all_logs():
     """view all workout logs"""

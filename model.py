@@ -52,7 +52,7 @@ class Exercise(db.Model):
     exercise_name = db.Column(db.Text)
     exercise_description = db.Column(db.String)
     exercise_pic_url = db.Column(db.String)
-    muscle_id = db.Column(db.Integer, db.ForeignKey('muscles.muscle_id'))
+    muscle_id = db.Column(db.Integer, db.ForeignKey('muscles.id'))
     
     muscles = db.relationship("Muscle", backref="exercises")
     
@@ -83,7 +83,7 @@ class Exercise(db.Model):
     @classmethod
     def get_exercises_by_muscle_id(cls,muscle_id):
         """returns an exercise by muscle id"""
-        return cls.query.get(muscle_id)
+        return cls.query.filter_by(muscle_id=muscle_id)
     
 class Workout(db.Model):
     
