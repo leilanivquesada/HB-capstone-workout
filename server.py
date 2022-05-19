@@ -23,10 +23,10 @@ def render_homepage():
     """render the initial page."""
     return render_template('homepage.html')
 
+# TODO: test this route
 @app.route('/all-exercises')
 def all_exercises():
     """View all exercises"""
-    
     url = 'https://wger.de/api/v2/exercise/?language=2'
     data = '{"key": "value"}'
     headers = {'Accept': 'application/json',
@@ -37,6 +37,7 @@ def all_exercises():
     
     return render_template("all_exercises.html", exercises=exercises)
 
+# TODO: test this route
 @app.route('/exercises/<exercise_id>')
 def show_exercise(exercise_id):
     """Show details on a particular exercise."""
@@ -59,7 +60,6 @@ def show_muscles():
                'Authorization': WGER_API_KEY}
     response = requests.get(url=url, data={}, headers=headers)
     muscles = response.json()
-    
     results = muscles['results']
     sorted_results = sorted(results, key=lambda k : k['id'])
     
@@ -97,7 +97,6 @@ def get_exercise_by_muscle_id(muscle_id):
 @app.route("/add_to_workout", methods=["POST"])
 def create_log():
     """create new logs and exercises"""
-    
     # INFO needed to create new LOG record
     date = session["workout"]
     user_email = session.get("user_email")
@@ -107,39 +106,54 @@ def create_log():
     workout_id = workout.workout_id
     num_of_sets = request.json.get("numberOfSets")
     num_of_sets = int(num_of_sets)
-    
-    #create exercise record for exercise db
+    #INFO needed to create/check exercise record for exercise db
     exercise_api_id = str(request.json.get("exercise_id"))
-    exercise_name = request.json.get("exercise_name")
-    exercise_description = request.json.get("exercise_description")
-    
     exercise = crud.get_exercise_by_api_id(exercise_api_id)
     print("*"*20, "\n\n")
-    print(f'{exercise}') 
-    print(f'exercise:{exercise}')
-    print("*"*20, "\n\n")
-    print(f"{exercise == None}")
-    print("*"*20, "\n\n")
-    print("*"*20, "\n\n")
-
     if exercise:
         exercise_id = exercise.id
-    else:        
+    else:    
+        exercise_name = request.json.get("exercise_name")
+        exercise_description = request.json.get("exercise_description")    
         new_exercise = crud.create_exercise(exercise_api_id, exercise_name, exercise_description)
         db.session.add(new_exercise)
         db.session.commit()
-       
         exercise_id = new_exercise.id
-    
     # create logs 
     for number in range(num_of_sets):
         log = crud.create_new_log(workout_id, exercise_id)
         db.session.add(log)
         db.session.commit()
-        print("*"*20, "\n\n")
-        print(log)
-        print("*"*20, "\n\n")
     return "You got this!"
+
+@app.route('/update_workout_log', methods=["POST"])
+def update_workout_log():
+    """View logs scheduled to a workout, allowing users to update each log"""
+    
+    # TODO: make a way for the person to add to the log. They can grab from the calendar or click on a link?
+    workout_date = session['workout']
+    user_email = session["email"]
+    user = crud.get_user_by_email(user_email).first()
+    user_id = user.id
+    user_workout = crud.get_user_workout_by_date(workout_date, user_id).first()
+    workout_id = user_workout.id
+    user_logs = crud.view_all_logs_by_user_by_workout(user_id, workout_id).all()
+    for log in user_logs:
+        exercise_id = log['exercise_id']
+        exercise = crud.get_exercise_by_id(exercise_id).first()
+        exercise_name = exercise['exercise_name']
+        exercise_description = exercise['exercise_description']
+        
+    # in jinja, create a form that loops through the user_logs and creates fields to fill- num reps, weight and defaults to lb for weight unit
+    
+    
+    return
+
+@app.route('/update_workout_log', methods=["POST"])
+def update_workout_log():
+    
+    
+    return
 
 @app.route("/schedule_workout", methods=["POST"])
 def create_workout():
@@ -159,7 +173,6 @@ def create_workout():
         db.session.add(workout)
         db.session.commit()
         flash("Workout added! Start adding exercises.", 'alert alert-success')
-
     return redirect("/muscle")
 
 @app.route('/user_dashboard')
@@ -191,32 +204,7 @@ def display_user_dashboard():
 # @app.route('/workout_log')
 # def update_log():
     
-#     """add exercise to workout by creating a new log"""
-#     # index_of_exercise = request.form.get("index_value")
-#     # flash(f'{index_of_exercise}')
-#     # muscle_id = session["muscle_id"]
-#     # date = session["date"]
-#     # email = session["email"]
-#     # user_id = crud.get_user_by_email(email)
-    
-#     """check for exercise and/or create new exercise in db"""
-#     exercise_name= request.form.get("exercise_name")
-#     exercise_description = request.form.get("exercise_description")
-#     exercise_id=request.form.get("exercise_id")
-#     flash(f'{exercise_name}, {exercise_description}, {exercise_id}')
-    
-    
-    
-    
-#     # workout_id = crud.get_user_workout_by_date(date_of_scheduled_workout=date, user_id=user_id)
-#     # new_log = crud.create_new_log(workout_id=workout_id, exercise_id=exercise_id, )
-# # index of exercise, add to exercise log
-# # send to server the exercise and exercise id
-# # flash that it's added
-# # return redirect to same page
-#     return redirect('/user_dashboard')
-
-
+# TODO: test this route. is this route even necessary?
 @app.route('/every_single_exercise')
 def process_all_exercises():
     for index in range(0,2000,20):
@@ -225,12 +213,7 @@ def process_all_exercises():
                    'Authorization': WGER_API_KEY}
         data = '{"key": "value"}'
         response = requests.get(url=url, data=data, headers=headers)
-        print("*"*20, "\n\n")
-        print(response)
-        print("*"*20, "\n\n")
         exercises = response.json()
-        print("*"*20, "\n\n")
-        print(exercises)
         print("*"*20, "\n\n")
         with open('exercises.json','w') as json_file:
             json.dump(exercises, json_file)
@@ -239,11 +222,9 @@ def process_all_exercises():
 @app.route('/login', methods=["POST"])
 def process_login():
     """Process user login."""
-    
     email = request.form.get("email")
     password = request.form.get("password") 
     user = crud.get_user_by_email(email)
-    
     if email == "":
         flash("Please enter an email and password to log in", 'alert alert-danger')
         return redirect("/")
@@ -259,11 +240,9 @@ def process_login():
 @app.route("/users", methods=["POST"])
 def register_user():
     """Create a new user."""
-
     email = request.form.get("email")
     password = request.form.get("password")
     username = request.form.get("username")
-
     user_email = crud.get_user_by_email(email)
     user_username = crud.get_user_by_username(username)
 
