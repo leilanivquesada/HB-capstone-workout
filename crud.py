@@ -31,9 +31,9 @@ def get_all_users():
 
 """Exercise CRUD Operations"""
 
-def create_exercise(exercise_id, exercise_name, exercise_description):
+def create_exercise(exercise_api_id, exercise_name, exercise_description):
     """ create a new exercise """
-    new_exercise = Exercise(exercise_id=exercise_id, exercise_name=exercise_name, exercise_description=exercise_description)
+    new_exercise = Exercise(exercise_api_id=exercise_api_id, exercise_name=exercise_name, exercise_description=exercise_description)
     return new_exercise
 
 def get_all_exercises():
@@ -44,9 +44,9 @@ def get_exercise_by_id(id):
     """return an exercise by exercise_id"""
     return Exercise.query.get(id)
 
-def get_exercise_by_API_id(exercise_id):
+def get_exercise_by_api_id(exercise_api_id):
     """return an exercise by exercise_id"""
-    return Exercise.query.filter_by(exercise_id=exercise_id)
+    return Exercise.query.filter_by(exercise_api_id=exercise_api_id).first()
 
 """Workout CRUD Operations"""
 
@@ -92,7 +92,6 @@ def view_all_logs_by_user_id(user_id):
 def view_all_logs_by_user_by_workout(user_id, workout_id):
     """view all logs for a user and date"""
     return Log.query.filter_by(user_id=user_id, workout_id=workout_id)
-
 
 """Muscles CRUD operations"""
 

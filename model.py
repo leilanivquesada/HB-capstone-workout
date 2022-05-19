@@ -46,9 +46,9 @@ class Exercise(db.Model):
     
     __tablename__ = "exercises"
     
-    id = db.Column(db.Integer, primary_key= True, nullable=False)
+    id = db.Column(db.Integer, primary_key= True, nullable=False, unique=True)
     # exercise_id corresponds to wger API exercise_id
-    exercise_id = db.Column(db.Integer, nullable=False, unique=True)
+    exercise_api_id = db.Column(db.Integer, nullable=False, unique=True)
     exercise_name = db.Column(db.Text)
     exercise_description = db.Column(db.String)
     exercise_pic_url = db.Column(db.String)
@@ -57,14 +57,14 @@ class Exercise(db.Model):
     muscles = db.relationship("Muscle", backref="exercises")
     
     def __repr__(self):
-        return f'<id={self.id} API exercise id={self.exercise_id} exercise name={self.exercise_name} description={self.exercise_description}>'
+        return f'<id={self.id} API exercise id={self.exercise_api_id} exercise name={self.exercise_name} description={self.exercise_description}>'
 
     @classmethod
-    def create(cls, id, exercise_id, exercise_name, exercise_description, exercise_pic_url):
+    def create(cls, id, exercise_api_id, exercise_name, exercise_description, exercise_pic_url):
         """ creates an exercise for the exercise database"""
         return cls(
             id=id,
-            exercise_id=exercise_id, 
+            exercise_id=exercise_api_id, 
             exercise_name=exercise_name, 
             exercise_description=exercise_description, 
             exercise_pic_url=exercise_pic_url
@@ -89,8 +89,8 @@ class Workout(db.Model):
     
     __tablename__ = "workouts"
     
-    workout_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
-    date_of_scheduled_workout= db.Column(db.Date, nullable=False, unique=True)
+    workout_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False, unique=True)
+    date_of_scheduled_workout= db.Column(db.Date, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     
     user = db.relationship("User", backref="workouts")
@@ -111,8 +111,7 @@ class Workout(db.Model):
     def all_workouts(cls):
         """returns all workouts"""
         return cls.query.all()
-    
-    
+      
 class Muscle(db.Model):
     
     __tablename__ = 'muscles'
@@ -145,14 +144,13 @@ class Muscle(db.Model):
         """creates muscle"""
         return cls(muscle_id=muscle_id, name=name)
     
-
 class Log(db.Model):
     
     __tablename__ = 'logs'
     
     log_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     workout_id = db.Column(db.Integer, db.ForeignKey('workouts.workout_id'), nullable=False)
-    exercise_id = db.Column(db.Integer, db.ForeignKey('exercises.exercise_id'), nullable=False)
+    exercise_id = db.Column(db.Integer, db.ForeignKey('exercises.id'), nullable=False)
     num_reps = db.Column(db.Integer)
     weight = db.Column(db.Float)
     weight_unit = db.Column(db.String)

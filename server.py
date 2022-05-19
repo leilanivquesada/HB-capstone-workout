@@ -96,9 +96,7 @@ def get_exercise_by_muscle_id(muscle_id):
     
 @app.route("/add_to_workout", methods=["POST"])
 def create_log():
-    """create new logs"""
-    print("*"*20, "\n\n")
-    print("WE ARE HAVING A PARTY IN create_log")
+    """create new logs and exercises"""
     
     # INFO needed to create new LOG record
     date = session["workout"]
@@ -109,32 +107,29 @@ def create_log():
     workout_id = workout.workout_id
     num_of_sets = request.json.get("numberOfSets")
     num_of_sets = int(num_of_sets)
+    
     #create exercise record for exercise db
-    """TODO: is it necessary for me to make tables of exercise names and ids, since I'm pulling from the API anyway?"""
-    """Yes, because I need those IDs for the workout logs"""
-    #TODO grab exercise information from the form, check for existing record in DB
-    exercise_id = request.json.get("exercise_id")
-    exercise_id = int(exercise_id)
+    exercise_api_id = str(request.json.get("exercise_id"))
     exercise_name = request.json.get("exercise_name")
     exercise_description = request.json.get("exercise_description")
-    print(request.json)
-    print("*"*20, "\n\n")
-    print(f"exercise id={exercise_id} exercise name = {exercise_name} exercise_description = {exercise_description}")
-    print("*"*20, "\n\n")
-    exercise = crud.get_exercise_by_API_id(exercise_id)
-    print(exercise)
-    print(exercise == "")
     
-    if exercise == None:
-        exercise = crud.create_exercise(exercise_id, exercise_name, exercise_description)
-        db.session.add(exercise)
+    exercise = crud.get_exercise_by_api_id(exercise_api_id)
+    print("*"*20, "\n\n")
+    print(f'{exercise}') 
+    print(f'exercise:{exercise}')
+    print("*"*20, "\n\n")
+    print(f"{exercise == None}")
+    print("*"*20, "\n\n")
+    print("*"*20, "\n\n")
+
+    if exercise:
+        exercise_id = exercise.id
+    else:        
+        new_exercise = crud.create_exercise(exercise_api_id, exercise_name, exercise_description)
+        db.session.add(new_exercise)
         db.session.commit()
-        print("*"*20, "\n\n")
-        print(f'Here are your exercises: {exercise}')
-        print("*"*20, "\n\n")
-    # FIXME: error when trying to create new exercise and new log; 
-    # psycopg2.errors.ForeignKeyViolation) insert or update on table "logs" violates foreign key constraint "logs_exercise_id_fkey"
-    # DETAIL:  Key (exercise_id)=(307) is not present in table "exercises".
+       
+        exercise_id = new_exercise.id
     
     # create logs 
     for number in range(num_of_sets):
