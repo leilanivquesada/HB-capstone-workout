@@ -149,11 +149,6 @@ def update_workout_log():
     
     return
 
-@app.route('/update_workout_log', methods=["POST"])
-def update_workout_log():
-    
-    
-    return
 
 @app.route("/schedule_workout", methods=["POST"])
 def create_workout():
