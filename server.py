@@ -70,13 +70,11 @@ def show_muscles():
             muscle_name = result['name']
             muscle_en_name = result['name_en']
             if muscle_en_name not in result:
-                new_muscle = crud.create_muscle_no_en(muscle_id, muscle_name)
-                db.session.add(new_muscle)
-                db.session.commit()
+                new_muscle = crud.create_muscle(muscle_id, muscle_name, muscle_name)
             else:
                 new_muscle = crud.create_muscle(muscle_id, muscle_name, muscle_en_name)
-                db.session.add(new_muscle)
-                db.session.commit()
+            db.session.add(new_muscle)
+            db.session.commit()
             
     return render_template("muscle.html", muscles=muscles)    
 
@@ -137,17 +135,25 @@ def update_workout_log():
     user_id = user.id
     user_workout = crud.get_user_workout_by_date(workout_date, user_id).first()
     workout_id = user_workout.id
-    user_logs = crud.view_all_logs_by_user_by_workout(user_id, workout_id).all()
+    user_logs = crud.view_all_logs_by_user_by_workout(workout_id).all()
+    full_workout_log = []
     for log in user_logs:
         exercise_id = log['exercise_id']
         exercise = crud.get_exercise_by_id(exercise_id).first()
         exercise_name = exercise['exercise_name']
         exercise_description = exercise['exercise_description']
-        
+        log_to_render = {
+            'exercise_id': log['exercise_id'],
+            'exercise_name': exercise_name,
+            'exercise_description': exercise_description,
+            'log_id': log['log_id']
+        }
+        full_workout_log.push(log_to_render)
+    return "I probably need help on this"
     # in jinja, create a form that loops through the user_logs and creates fields to fill- num reps, weight and defaults to lb for weight unit
     
     
-    return
+    return render_template("workout_log.html")
 
 
 @app.route("/schedule_workout", methods=["POST"])

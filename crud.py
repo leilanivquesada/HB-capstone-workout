@@ -58,6 +58,10 @@ def create_workout(date_of_scheduled_workout, user_id):
 def get_all_workouts():
     return Workout.query.all()
 
+def get_all_workouts_by_id(workout_id):
+    """get all workouts for a particular user"""
+    return Workout.query.get(workout_id)
+
 def get_all_workouts_by_user_id(user_id):
     """get all workouts for a particular user"""
     return Workout.query.filter_by(user_id=user_id).all()
@@ -85,13 +89,17 @@ def view_all_logs():
     """view all workout logs"""
     return Log.query.all()
 
-def view_all_logs_by_user_id(user_id):
-    """view all logs for a user"""
-    return Log.query.filter_by(user_id=user_id)
-
-def view_all_logs_by_user_by_workout(user_id, workout_id):
+def view_all_logs_by_workout(workout_id):
     """view all logs for a user and date"""
-    return Log.query.filter_by(user_id=user_id, workout_id=workout_id)
+    return Log.query.filter_by(workout_id=workout_id).all()
+
+# TODO: do i need this function?
+def get_exercise_in_log(log_id):
+    """get the name of the exercise in the log"""
+    log = Log.query.get(log_id)
+    exercise_id = log.exercise_id
+    return Exercise.query.get(exercise_id)
+    
 
 """Muscles CRUD operations"""
 
