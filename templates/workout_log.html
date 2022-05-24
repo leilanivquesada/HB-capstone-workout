@@ -21,8 +21,8 @@
             <a href="/show_description">{{log['exercise_name']}}</a>
         </div>
         <div class="update-log-{{log['log_id']}}">
-            <input type="number" name="num-of-reps-{{log['log_id']}}" aria-label="num-of-reps" placeholder="number of reps" />
-            <input type="number" name="weight-{{log['log_id']}}" aria-label="weight" placeholder="weight" />
+            <input type="number" id="num-of-reps-{{log['log_id']}}" name="num-of-reps-{{log['log_id']}}" aria-label="num-of-reps" placeholder="number of reps" />
+            <input type="number" id="weight-{{log['log_id']}}" name="weight-{{log['log_id']}}" aria-label="weight" placeholder="weight" />
             <label for="weight-unit"> Weight Unit </label>
             <select name="weight-unit" id="weight-unit-{{log['log_id']}}">
             <option value="lb" id="weight-unit-log-{{log['log_id']}}">pound(s)</option>

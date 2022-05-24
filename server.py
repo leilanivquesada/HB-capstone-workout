@@ -213,7 +213,7 @@ def delete_exercise_log():
     """The user may delete an exercise log"""
     log_id = request.json.get("log_id")
     deleted_log = crud.delete_log(log_id)
-    
+    return "deleted"    
     
     
 @app.route('/user_dashboard')

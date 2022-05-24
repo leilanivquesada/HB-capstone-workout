@@ -34,6 +34,7 @@ for (const button of deleteButtons) {
     const log_to_delete = {
       log_id: logId
     }
+    console.log(log_to_delete);
     fetch('/delete_log', {
       method: 'DELETE',
       body: JSON.stringify(log_to_delete),
@@ -63,8 +64,8 @@ for (const button of editButtons) {
     const logId = button.id;
     const log_update_inputs={
       // why is this returning as NULL??? querySelector and getElementById are both showing up as Null
-      weight: document.querySelector(`#weight-${logId}`).value,
-      num_of_reps: document.querySelector(`#num-of-reps-${logId}`).value,
+      weight: document.getElementById(`weight-${logId}`).value,
+      num_of_reps: document.getElementById(`num-of-reps-${logId}`).value,
       weight_unit: document.getElementById(`weight-unit-${logId}`).selectedOptions[0].value,
       log_id: logId
     };
