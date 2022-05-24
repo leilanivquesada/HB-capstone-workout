@@ -38,22 +38,30 @@ def all_exercises():
     return render_template("all_exercises.html", exercises=exercises)
 
 # TODO: test this route
-@app.route('/exercises/<exercise_id>')
-def show_exercise(exercise_id):
-    """Show details on a particular exercise."""
-    url = 'https://wger.de/api/v2/exerciseinfo/{exercise_id}'
-    data = '{"key": "value"}'
-    headers = {'Accept': 'application/json',
-               'Authorization': WGER_API_KEY}
-    response = requests.get(url=url, data={}, headers=headers)
-    muscles = response.json()
+# @app.route('/exercises/<exercise_id>')
+# def show_exercise(exercise_id):
+#     """Show details on a particular exercise."""
+#     url = 'https://wger.de/api/v2/exerciseinfo/{exercise_id}'
+#     data = '{"key": "value"}'
+#     headers = {'Accept': 'application/json',
+#                'Authorization': WGER_API_KEY}
+#     response = requests.get(url=url, data={}, headers=headers)
+#     muscles = response.json()
     
-    exercise = crud.get_exercise_by_id(exercise_id)
-    return render_template("exercise_details.html", exercise=exercise)
+#     exercise = crud.get_exercise_by_id(exercise_id)
+#     return render_template("exercise_details.html", exercise=exercise)
 
 @app.route('/muscle')
 def show_muscles():
     """Select muscle group to search exercises and add muscles to server DB if new are added to API"""
+    print(f'LEILANILOOKATTHISTHENEXTLINEISTHEDATEOFTHEWORKOUTTHATISINSESSION')
+    print(session["workout"])
+    print(f'LEILANILOOKATTHISTHENEXTLINEISTHEDATEOFTHEWORKOUTTHATISINSESSION')
+    #FIXME: why is the session workout date defaulting to 5/10/2022 even though I've popped it at log out?
+    if session["workout"] == "":
+        flash("Please schedule your workout first!", 'alert alert-danger')
+        return redirect("/user_dashboard")
+    
     url = 'https://wger.de/api/v2/muscle/'
     data = '{"key": "value"}'
     headers = {'Accept': 'application/json',
@@ -124,37 +132,61 @@ def create_log():
         db.session.commit()
     return "You got this!"
 
-@app.route('/update_workout_log', methods=["POST"])
-def update_workout_log():
+@app.route('/update_workout_log', methods=["GET"])
+def display_workout_log():
     """View logs scheduled to a workout, allowing users to update each log"""
     
     # TODO: make a way for the person to add to the log. They can grab from the calendar or click on a link?
     workout_date = session['workout']
-    user_email = session["email"]
-    user = crud.get_user_by_email(user_email).first()
-    user_id = user.id
-    user_workout = crud.get_user_workout_by_date(workout_date, user_id).first()
-    workout_id = user_workout.id
-    user_logs = crud.view_all_logs_by_user_by_workout(workout_id).all()
+    user_email = session["user_email"]
+    
+    user = crud.get_user_by_email(user_email)
+    user_id = user.user_id
+    user_workout = crud.get_user_workout_by_date(workout_date, user_id)
+    
+    if not user_workout:
+        flash('Select the workout date to log first!', 'alert alert-danger')
+        return redirect('/user_dashboard', user=user)
+    
+    workout_id = user_workout.workout_id
+    user_logs = crud.view_all_logs_by_workout(workout_id)
     full_workout_log = []
-    for log in user_logs:
-        exercise_id = log['exercise_id']
-        exercise = crud.get_exercise_by_id(exercise_id).first()
-        exercise_name = exercise['exercise_name']
-        exercise_description = exercise['exercise_description']
+    
+    for workout_log in user_logs:
+        exercise_id = workout_log.exercise_id
+        exercise = crud.get_exercise_by_id(exercise_id)
+        exercise_name = exercise.exercise_name
+        exercise_description = exercise.exercise_description
         log_to_render = {
-            'exercise_id': log['exercise_id'],
+            # 'exercise_id': log['exercise_id'], #unsure if I need this code
             'exercise_name': exercise_name,
             'exercise_description': exercise_description,
-            'log_id': log['log_id']
+            'log_id': workout_log.log_id
         }
-        full_workout_log.push(log_to_render)
-    return "I probably need help on this"
+        full_workout_log.append(log_to_render)
     # in jinja, create a form that loops through the user_logs and creates fields to fill- num reps, weight and defaults to lb for weight unit
     
-    
-    return render_template("workout_log.html")
+    return render_template("workout_log.html", full_workout_log=full_workout_log, workout_date=workout_date)
 
+@app.route('/update_workout_log', methods=["POST"])
+def update_workout_log():
+    """Update workout logs with info from form"""
+    weight = request.json.get("weight")
+    print(f'weight: {weight}')
+    # weight = int(weight)
+    num_of_reps = request.json.get("num_of_reps")
+    # num_of_reps = int(num_of_reps)
+    weight_unit = request.json.get("weight_unit")
+    log_id = request.json.get('log_id')
+    log_update = crud.update_workout_log(log_id, num_of_reps, weight, weight_unit)
+    print(log_update)
+    print(crud.get_log_by_id(log_id))
+    # FIXME: the committed record is not showing that num_reps nor weight are being saved. when convert to int, showing error.
+    print("Updated")
+    
+    view_user_workout_logs = crud.get_log_by_id(log_id)
+    print(view_user_workout_logs)
+    return "Success!"
 
 @app.route("/schedule_workout", methods=["POST"])
 def create_workout():
@@ -176,6 +208,14 @@ def create_workout():
         flash("Workout added! Start adding exercises.", 'alert alert-success')
     return redirect("/muscle")
 
+@app.route('/delete_log', methods=["DELETE"])
+def delete_exercise_log():
+    """The user may delete an exercise log"""
+    log_id = request.json.get("log_id")
+    deleted_log = crud.delete_log(log_id)
+    
+    
+    
 @app.route('/user_dashboard')
 def display_user_dashboard():
     """display user dashboard"""
@@ -196,7 +236,7 @@ def display_user_dashboard():
 #     bb_data = bb_quote_response.json()
     
     # return render_template("/user_dashboard.html", bb_data=bb_data)
-    return render_template("/user_dashboard.html")
+    return render_template("/user_dashboard.html", user=user)
 
 #TODO: VIEW/GET: view all exercises in a given workout when workout is clicked (view Logs)
 #TODO: VIEW all workouts for user in a list
@@ -273,11 +313,10 @@ def show_users(user_id):
 def logout():
     """Log user out."""
     session.pop(session["user_email"], None)
+    session.pop(session["workout"], None)
+    session.pop(session["muscle_id"], None)
     flash("Successfully logged out", 'alert alert-success')
     return redirect("/")
-
-
-
 
 if __name__ == "__main__":
     # DebugToolbarExtension(app)

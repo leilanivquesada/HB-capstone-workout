@@ -7,19 +7,96 @@
 // fetch-post to take info to server to create records
 
 
+const scheduleWorkout = document.querySelector('#schedule-workout-link');
+scheduleWorkout.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  const showCalendar = document.getElementById('schedule-workout');
+  console.log(showCalendar.display)
+  if (scheduleWorkout.innerHTML == "Schedule Workout") {
+    showCalendar.style.display = 'block';
+    scheduleWorkout.innerHTML = "Hide Calendar";
+  } 
+  else if (scheduleWorkout.innerHTML == "Hide Calendar") {
+    showCalendar.style.display = "none";
+    scheduleWorkout.innerHTML = "Schedule Workout";
+  }
+});
 
 
-// why? because i need to separate my routes. 
+
+
+const deleteButtons = document.querySelectorAll('.delete-log');
+for (const button of deleteButtons) {
+  button.addEventListener('click', (evt) => {
+    const logId = button.id
+    evt.preventDefault();
+    console.log(evt);
+    const log_to_delete = {
+      log_id: logId
+    }
+    fetch('/delete_log', {
+      method: 'DELETE',
+      body: JSON.stringify(log_to_delete),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then((response) => {
+      console.log(response);
+      console.log(`here is the log to delete: ${log_to_delete}`);
+      if (response.ok) {
+        console.log("deleted");
+        document.querySelector(`span.status-${logId}`).innerHTML = "Log deleted!";
+      } else {
+        console.log(response);
+        document.querySelector(`span.status-${logId}`).innerHTML = "Log not deleted!";
+      }
+    })
+  })
+};
+
+const editButtons = document.querySelectorAll('.update-log')
+for (const button of editButtons) {
+  button.addEventListener('click', (evt) => {
+    // prevent page refresh or redirect upon clicking update log button
+    evt.preventDefault();
+    console.log(evt);
+    const logId = button.id;
+    const log_update_inputs={
+      // why is this returning as NULL??? querySelector and getElementById are both showing up as Null
+      weight: document.querySelector(`#weight-${logId}`).value,
+      num_of_reps: document.querySelector(`#num-of-reps-${logId}`).value,
+      weight_unit: document.getElementById(`weight-unit-${logId}`).selectedOptions[0].value,
+      log_id: logId
+    };
+    console.log(log_update_inputs)
+    fetch('/update_workout_log', {
+      method: 'POST',
+      body: JSON.stringify(log_update_inputs),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      console.log(response)
+      console.log(log_update_inputs)
+      if (response.ok) {
+        console.log("updated")
+        document.querySelector(`span.status-${logId}`).innerHTML = "Log updated!"
+      } else {
+        console.log(response)
+        document.querySelector(`span.status-${logId}`).innerHTML = "Log not updated!"
+        alert("Leilani! There's an error!")
+      }
+    });
+  });
+}
+
 
 
 
 const addButtons = document.querySelectorAll('.add-to-workout');
-
 for (const button of addButtons) {
   button.addEventListener('click', (evt) => {
     evt.preventDefault();  
-    console.log(evt) 
-    const exercise_id = button.id
     const numSets = prompt('How many sets would you like to do?');
     
     const formInputs = {
@@ -29,8 +106,6 @@ for (const button of addButtons) {
       exercise_description : document.getElementById(`exercise-description-${button.id}`).value
     };
 
-    console.log(formInputs);
-    console.log(button.id);
     // send a fetch request to the update_rating route
     fetch('/add_to_workout', {
       method: 'POST',

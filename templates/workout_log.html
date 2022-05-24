@@ -2,18 +2,41 @@
 {% block title %}Workout Log{% endblock %}
 
 {% block body %}
-<h1>Workout_Log</h1>
+<h1>Workout Log for {{workout_date}}</h1>
 <h2></h2>
-{% comment %} view scheduled workouts {% endcomment %}
+{# view scheduled workouts #}
 <ul>
-    <form action='/update_log' method="PUT">
+    <form action='/update_log' method="POST">
         <p>
-            <
-    {% comment %} show the last 5 scheduled workouts {% endcomment %}
-    {% comment %} link to see more previous workouts {% endcomment %}
+            
 
-    {% comment %} once clicked, update form to show list of exercises with option to add {% endcomment %}
+    {# comment show the last 5 scheduled workouts #}
+    {# link to see more previous workouts #}
 
-{% comment %} Need to display date, exercise list, form to log {% endcomment %}
+    {# once clicked, update form to show list of exercises with option to add #}
+    
+    {% for log in full_workout_log %}
+    <div>    
+        <div id="{{log['log_id']}}" class="update-log-exercise">
+            <a href="/show_description">{{log['exercise_name']}}</a>
+        </div>
+        <div class="update-log-{{log['log_id']}}">
+            <input type="number" name="num-of-reps-{{log['log_id']}}" aria-label="num-of-reps" placeholder="number of reps" />
+            <input type="number" name="weight-{{log['log_id']}}" aria-label="weight" placeholder="weight" />
+            <label for="weight-unit"> Weight Unit </label>
+            <select name="weight-unit" id="weight-unit-{{log['log_id']}}">
+            <option value="lb" id="weight-unit-log-{{log['log_id']}}">pound(s)</option>
+            <option value="lap" id="weight-unit-log-{{log['log_id']}}">lap(s)</option>
+            </select>
+            <button class="update-log" id="{{log['log_id']}}">Update log</button>
+            <button class="delete-log" id="{{log['log_id']}}">Delete</button>
+        </div>
+        <div>
+        <span class="status-{{log['log_id']}}">
+        </div>
+    </div>
+    <div></div>
+    {% endfor %}
+{# Need to display date, exercise list, form to log #}
 
 {% endblock %}

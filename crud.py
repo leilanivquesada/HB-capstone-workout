@@ -72,6 +72,9 @@ def get_user_workout_by_date(date_of_scheduled_workout, user_id):
 
 """Log CRUD operations"""
 
+def get_log_by_id(log_id):
+    return Log.query.get(log_id)
+
 def create_new_log(workout_id, exercise_id):
     """create a new log to add to the workout"""
     new_log = Log(workout_id=workout_id, exercise_id=exercise_id)
@@ -83,7 +86,7 @@ def update_workout_log(log_id, new_num_reps, new_weight, new_weight_unit):
     log_update.num_reps = new_num_reps
     log_update.weight = new_weight
     log_update.weight_unit = new_weight_unit
-    return log_update
+    db.session.commit()
 
 def view_all_logs():
     """view all workout logs"""
@@ -99,6 +102,11 @@ def get_exercise_in_log(log_id):
     log = Log.query.get(log_id)
     exercise_id = log.exercise_id
     return Exercise.query.get(exercise_id)
+
+def delete_log(log_id):
+    log = Log.query.get(log_id)
+    db.session.delete(log)
+    db.session.commit()
     
 
 """Muscles CRUD operations"""
