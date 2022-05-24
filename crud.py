@@ -107,6 +107,7 @@ def delete_log(log_id):
     log = Log.query.get(log_id)
     db.session.delete(log)
     db.session.commit()
+    return
     
 
 """Muscles CRUD operations"""
