@@ -9,8 +9,9 @@
             <a href="/user/{{user.user_id}}">
                 {{ user.email}}
             </a>
-                <p>Username: {{ user.username}}</p>
-            
+                <p>Username: {{ user.username}}
+                    <br>
+                User_id: {{ user.user_id}}</p>
         </li>
     {% endfor %}
     </ul>

@@ -6,7 +6,7 @@
 <h2></h2>
 {# view scheduled workouts #}
 <ul>
-    <form action='/update_log' method="POST">
+    <form action='/update_workout_log' method="POST">
         <p>
             
 
@@ -16,27 +16,41 @@
     {# once clicked, update form to show list of exercises with option to add #}
     
     {% for log in full_workout_log %}
-    <div>    
-        <div id="{{log['log_id']}}" class="update-log-exercise">
-            <a href="/show_description">{{log['exercise_name']}}</a>
+    <div>
+        <div id="div-{{log['log_id']}}">    
+            <div id="{{log['log_id']}}" class="update-log-exercise">
+                {#<a href="/show_description">#}
+                    {{log['exercise_name']}}{#</a>#}
+                <div="description-{{log['log_id']}}"></div>
+            </div>
+            <div class="update-log-{{log['log_id']}}">
+                <input type="number" id="num-of-reps-{{log['log_id']}}" name="num-of-reps-{{log['log_id']}}" aria-label="num-of-reps" placeholder="number of reps" />
+                <input type="number" id="weight-{{log['log_id']}}" name="weight-{{log['log_id']}}" aria-label="weight" placeholder="weight" />
+                <label for="weight-unit"> Weight Unit </label>
+                <select name="weight-unit" id="weight-unit-{{log['log_id']}}">
+                <option value="lb" id="weight-unit-log-{{log['log_id']}}">pound(s)</option>
+                <option value="lap" id="weight-unit-log-{{log['log_id']}}">lap(s)</option>
+                </select>
+                <button class="update-log" id="{{log['log_id']}}">Update log</button>
+                <button class="delete-log" id="{{log['log_id']}}">Delete</button>
+            </div>
         </div>
-        <div class="update-log-{{log['log_id']}}">
-            <input type="number" id="num-of-reps-{{log['log_id']}}" name="num-of-reps-{{log['log_id']}}" aria-label="num-of-reps" placeholder="number of reps" />
-            <input type="number" id="weight-{{log['log_id']}}" name="weight-{{log['log_id']}}" aria-label="weight" placeholder="weight" />
-            <label for="weight-unit"> Weight Unit </label>
-            <select name="weight-unit" id="weight-unit-{{log['log_id']}}">
-            <option value="lb" id="weight-unit-log-{{log['log_id']}}">pound(s)</option>
-            <option value="lap" id="weight-unit-log-{{log['log_id']}}">lap(s)</option>
-            </select>
-            <button class="update-log" id="{{log['log_id']}}">Update log</button>
-            <button class="delete-log" id="{{log['log_id']}}">Delete</button>
-        </div>
-        <div>
-        <span class="status-{{log['log_id']}}">
-        </div>
+        <span class="status" id="status-{{log['log_id']}}"></span>
     </div>
     <div></div>
+    <br>
     {% endfor %}
+    
 {# Need to display date, exercise list, form to log #}
 
 {% endblock %}
+{% block js %}
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umg/react-dom.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0.babel.js"></script>
+  
+<script src="/static/js/body.js"> </script>
+<script src="/static/js/workoutLog.js"> </script>
+{% endblock %}
+  
+  

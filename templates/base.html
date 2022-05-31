@@ -5,36 +5,86 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/../static/css/site.css">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+
     
+    {% block chartScript%}{% endblock chartScript %}
     <title>
       {% block title %}{% endblock %}
     </title>
 
-    {% endblock %}
+    {% endblock head%}
     
   </head>
   <body>
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <div class=flashes>
-      {% for category, message in messages %}
-        <div class="{{category}}" role="alert">
-          {{ message }}
-        </div>
-      {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
-    {% block body %}{% endblock %}
+    <div class="title"><p /></div>
+    <div class="flash-messages">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class=flashes>
+          {% for category, message in messages %}
+            <div class="{{category}}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+    </div>
 
-    {% block after_body %}{% endblock %}
-    {% block js %}
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umg/react-dom.development.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0.babel.js"></script>
-    <script src="/../static/js/body.js"> </script>
-    {% endblock %}
+    <div class="container-fluid">
+      <div class="nav-bar">
+          <ul class="nav justify-content-center">
+          <li class="nav-item">
+              <a class="nav-link active" href="/schedule_workout" id="schedule-workout-link">Schedule Workout</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/muscle" id="muscle">Add Exercises</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/view_workout_log" id="view-workout-log">View Workouts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/update_workout_log" id="workout-log">Log Workout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/user_dashboard" id="user-dashboard">Dashboard</a>
+        </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/logout" id="logout">Log Out</a>
+          </li>  
+          </ul>
+      </div>
+    </div>
+    <div class="container-fluid" id="dashboard">
+    </div>
+    <div class="container-fluid" id="body">
+        <div id="schedule-workout" style="display: none;">
+            <form action="/schedule_workout" method="POST">
+                <label for="form-to-schedule-workout">
+                    Schedule Workout
+                </label>
+                <input type="date" id="cal-to-schedule-workout" name="cal-to-schedule-workout">
+                <p><input type="submit"></p>
+            </form>
+        </div>
+        
+    </div>
+  {% block body %}  
+  {% endblock %}
+
+  {% block after_body %}
+  {% endblock %}
+
+  {% block js %}
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umg/react-dom.development.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0.babel.js"></script>
+    
+  <script src="/static/js/body.js"> </script>
+  {% endblock %}
     
   </body>
 </html>

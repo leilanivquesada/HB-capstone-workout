@@ -1,7 +1,11 @@
+from cgitb import text
 import json
 from flask import Flask, render_template, request, flash, session, redirect
 from model import connect_to_db, db
 import crud
+import random
+
+from sqlalchemy import func
 
 from jinja2 import StrictUndefined
 
@@ -14,7 +18,7 @@ app = Flask(__name__)
 app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
-BB_QUOTES_API_KEY = os.environ['BB_QUOTES_API_KEY']
+# BB_QUOTES_API_KEY = os.environ['BB_QUOTES_API_KEY']
 WGER_API_KEY = os.environ['WGER_API_KEY']
 
 
@@ -54,10 +58,6 @@ def all_exercises():
 @app.route('/muscle')
 def show_muscles():
     """Select muscle group to search exercises and add muscles to server DB if new are added to API"""
-    print(f'LEILANILOOKATTHISTHENEXTLINEISTHEDATEOFTHEWORKOUTTHATISINSESSION')
-    print(session["workout"])
-    print(f'LEILANILOOKATTHISTHENEXTLINEISTHEDATEOFTHEWORKOUTTHATISINSESSION')
-    #FIXME: why is the session workout date defaulting to 5/10/2022 even though I've popped it at log out?
     if session["workout"] == "":
         flash("Please schedule your workout first!", 'alert alert-danger')
         return redirect("/user_dashboard")
@@ -105,9 +105,8 @@ def create_log():
     """create new logs and exercises"""
     # INFO needed to create new LOG record
     date = session["workout"]
-    user_email = session.get("user_email")
-    user = crud.get_user_by_email(user_email)
-    user_id = user.user_id
+    user_id = session['user_id']
+    user = crud.get_by_user_id(user_id)
     workout = crud.get_user_workout_by_date(date, user_id)
     workout_id = workout.workout_id
     num_of_sets = request.json.get("numberOfSets")
@@ -138,15 +137,12 @@ def display_workout_log():
     
     # TODO: make a way for the person to add to the log. They can grab from the calendar or click on a link?
     workout_date = session['workout']
-    user_email = session["user_email"]
-    
-    user = crud.get_user_by_email(user_email)
-    user_id = user.user_id
+    user_id = session["user_id"]
     user_workout = crud.get_user_workout_by_date(workout_date, user_id)
     
     if not user_workout:
         flash('Select the workout date to log first!', 'alert alert-danger')
-        return redirect('/user_dashboard', user=user)
+        return redirect('/user_dashboard')
     
     workout_id = user_workout.workout_id
     user_logs = crud.view_all_logs_by_workout(workout_id)
@@ -181,7 +177,6 @@ def update_workout_log():
     log_update = crud.update_workout_log(log_id, num_of_reps, weight, weight_unit)
     print(log_update)
     print(crud.get_log_by_id(log_id))
-    # FIXME: the committed record is not showing that num_reps nor weight are being saved. when convert to int, showing error.
     print("Updated")
     
     view_user_workout_logs = crud.get_log_by_id(log_id)
@@ -193,9 +188,7 @@ def create_workout():
     """Create a new workout."""
     # import pdb; pdb.set_trace()
     date = request.form.get("cal-to-schedule-workout")
-    user_email = session["user_email"]
-    user = crud.get_user_by_email(user_email)
-    user_id = user.user_id
+    user_id = session["user_id"]
     workout = crud.get_user_workout_by_date(date, user_id)
     session["workout"] = date
     session.modified = True
@@ -213,7 +206,8 @@ def delete_exercise_log():
     """The user may delete an exercise log"""
     log_id = request.json.get("log_id")
     deleted_log = crud.delete_log(log_id)
-    return "deleted"    
+    flash("Log deleted!", 'alert alert-success')
+    return redirect('/update_workout_log')    
     
     
 @app.route('/user_dashboard')
@@ -222,21 +216,99 @@ def display_user_dashboard():
     #TODO need to make a chart in JS Chart
     #TODO need to display lists of workouts
         # Pull random bodybuilding quote from API to greet user at user_dashboard
-    #TODO why isn't username displaying in dashboard? Error 'user' is undefined 
-    user_email = session["user_email"]
-    user = crud.get_user_by_email(user_email)
-    username = user.username  
+    user_id = session["user_id"]
+    user = crud.get_by_user_id(user_id)
     
-#     url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
-#     headers = {
-#     "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
-#     "X-RapidAPI-Key": BB_QUOTES_API_KEY
-# }
-#     bb_quote_response = requests.request("GET", url, headers=headers)
-#     bb_data = bb_quote_response.json()
+    # total_workouts = crud.get_all_workouts_by_user_id(user_id).count()
+    #TODO: use total_workouts on dashboard to show how many scheduled workouts the user has done
+    #TODO: look for total_workouts where reps or weight is not null. 
+    # populate the form
+    
+    user_exercise_info = dict()
+    #get all user workouts
+    #DASHBOARD item: total number of workouts
+    workouts = crud.get_all_workouts_by_user_id(user_id)
+    workout_count = len(workouts)
+    #DASHBOARD item: user max weight
+    user_max_weight = crud.get_user_max_weight(user_id)
+    
+    #DASHBOARD item: for drop down chart
+    user_exercise_list = crud.get_user_distinct_exercise_list(user_id)
+    
+    
+    
+    
+    #get all user logs
+    #get all exercise names in log
+    #dump the exercise name and exercise id into the user_exercise_info dictionary
+    
+    #get information for the chart
+    data_to_chart = dict()
+    #get the name and id of the exercise from the drop down
+    #query the exercise id against logs
+    #TODO get info from the form. query all logs. get the max number per day.
+    #exercise_id(get this from the form) = form.get.(get this info from the form)
+    #logs = crud.get_log_by_exercise_id(exercise_id)
+    #TODO: loop through the logs to get the workout ids associated. GET THE DATE
+    #for workout in logs
+    #TODO: HERE IS THE PERSONAL RECORD
+    #personal_record = max(log.weight)
+    #TODO: Get the max per day and the day to be charted
+    #get max per day
+    #get max per workout_id, 
+    # select DISTINCT(e.exercise_name), 
+    # e.exercise_id from exercises join on e.exercise_id = l.exercise_id, 
+    #     join on w.workout_id = l.workout_id
+    #         where w.user_id = INPUT
+            
+    # SELECT e.exercise_name, e.id 
+    #     FROM Exercise AS e 
+    #     JOIN Log AS l ON e.id = l.exercise_id 
+    #     JOIN Workout AS w ON w.workout_id = l.workout_id 
+    #     WHERE w.user_id = {{INPUT USER}} 
+    #     GROUP BY e.exercise_name
+    # user_id = 
+    # stmt = (
+        # Exercise.query.join(Log.exercise).join(Workout.logs).filter(Workout.user_id==1)
+    # )
+    # print(stmt)
+    #query = text("""SELECT e.exercise_name, e.id FROM Exercise AS e JOIN Log AS l ON e.id = l.exercise_id JOIN Workout AS w ON w.workout_id = l.workout_id GROUP BY e.exercise_name""")
+    
+    user_exercises = db.session.query()
+    
+    # e.exercise_id -> log.exercise_id
+    # workout_id -> log.workout_id
+    # workout.user_id -> CHOSEN USER
+    
+    # where user_id = user_id
+    # w.user_id (from WORKOUT) = input(user_id)
+    # DISTINCT, 
+    
+    
+    #drop down menu, which will be populated by a list of all exercises the USER has done
+    #all exercises will be distinct (no duplicate exercise name in table)
+    
+    #join 
+    
+    
+    # get info from the form 
+    
+    
+    # url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
+    # headers = {
+    # "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
+    # "X-RapidAPI-Key": BB_QUOTES_API_KEY
+    # }
+    # bb_quote_response = requests.request("GET", url, headers=headers)
+    # bb_data = bb_quote_response.json()
+    url = 'https://type.fit/api/quotes'
+    inspirational_quote_response = requests.request("GET", url)
+    all_quotes = inspirational_quote_response.json()
+    length_to_index = len(all_quotes) - 1
+    random_quote=all_quotes[random.randint(0,length_to_index)]
     
     # return render_template("/user_dashboard.html", bb_data=bb_data)
-    return render_template("/user_dashboard.html", user=user)
+    return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_max_weight=user_max_weight, workout_count=workout_count, user_exercise_list=user_exercise_list)
 
 #TODO: VIEW/GET: view all exercises in a given workout when workout is clicked (view Logs)
 #TODO: VIEW all workouts for user in a list
@@ -245,21 +317,13 @@ def display_user_dashboard():
 # @app.route('/workout_log')
 # def update_log():
     
-# TODO: test this route. is this route even necessary?
-@app.route('/every_single_exercise')
-def process_all_exercises():
-    for index in range(0,2000,20):
-        url = f'https://wger.de/api/v2/api/v2/exercise/?limit={index}&language=2'
-        headers = {'Accept': 'application/json',
-                   'Authorization': WGER_API_KEY}
-        data = '{"key": "value"}'
-        response = requests.get(url=url, data=data, headers=headers)
-        exercises = response.json()
-        print("*"*20, "\n\n")
-        with open('exercises.json','w') as json_file:
-            json.dump(exercises, json_file)
-        return "There you go!"
-    
+
+
+#made but not in use
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html', msg=e), 404
+
 @app.route('/login', methods=["POST"])
 def process_login():
     """Process user login."""
@@ -273,8 +337,8 @@ def process_login():
         flash("The email or password you entered is incorrect.", 'alert alert-danger')
         return redirect("/")
     else: 
-        session["user_email"] = user.email
         username = user.username
+        session["user_id"] = user.user_id
         flash(f"Welcome back, {user.username}!", 'alert alert-success')
         return redirect("/user_dashboard")
     
@@ -296,23 +360,27 @@ def register_user():
         flash("Account created! Please log in.", 'alert alert-success')
 
     return redirect("/")
-    
-@app.route('/users')
+
+"""ADMIN Route for Leilani"""    
+# TODO delete later?
+@app.route('/users_and_workouts')
 def all_users():
     """"View all users"""
     users = crud.get_all_users()
     return render_template("all_users.html",users=users)
 
-@app.route('/user/<user_id>')
-def show_users(user_id):
+
+@app.route('/view_workout_log')
+def show_users():
     """Show details on a particular user"""
+    user_id = session["user_id"]
     user = crud.get_by_user_id(user_id)
     return render_template("user_details.html",user=user)
     
 @app.route("/logout")
 def logout():
     """Log user out."""
-    session.pop(session["user_email"], None)
+    session.pop(session["user_id"], None)
     session.pop(session["workout"], None)
     session.pop(session["muscle_id"], None)
     flash("Successfully logged out", 'alert alert-success')

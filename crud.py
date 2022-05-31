@@ -1,6 +1,7 @@
 """CRUD Operations"""
 
 from model import db, User, Workout, Exercise, Log, Muscle, connect_to_db
+from sqlalchemy import func
 
 if __name__ == '__main__':
     from server import app
@@ -15,7 +16,7 @@ def create_user(email, password, username):
 
 def get_by_user_id(user_id):
     """get user info by user_id"""
-    return User.query.get(user_id)
+    return User.query.get_or_404(user_id)
 
 def get_user_by_email(email):
     """get user by email"""
@@ -96,7 +97,10 @@ def view_all_logs_by_workout(workout_id):
     """view all logs for a user and date"""
     return Log.query.filter_by(workout_id=workout_id).all()
 
-# TODO: do i need this function?
+
+    
+    
+    
 def get_exercise_in_log(log_id):
     """get the name of the exercise in the log"""
     log = Log.query.get(log_id)
@@ -122,7 +126,7 @@ def get_all_muscles():
 
 def get_muscle_by_id(id):
     """return a muscle by its id"""
-    return Muscle.query.get(id)
+    return Muscle.query.get_or_404(id)
 
 def get_muscle_by_api_id(muscle_id):
     """return a muscle by its api id"""
@@ -137,3 +141,45 @@ def create_muscle_no_en(muscle_id, name):
     """create muscle"""
     new_muscle = Muscle(muscle_id=muscle_id, name=name)
     return new_muscle
+
+"""USER DASHBOARD CRUD OPERATIONS"""
+def get_user_max_weight(user_id):
+    """lame function. get the user's max weight (EVERRR)"""
+    return db.session.query(func.max(Log.weight)).join(Workout).filter_by(user_id=user_id).first()
+
+def get_user_distinct_exercise_list(user_id):
+    """get list of distinct exercises that user has done"""
+    # get list of user workouts
+    # get list of logs in each workout
+    # for each log, get exercise name, exercise id
+    user_exercise_set = set()
+    # user_workouts = 
+    user = User.query.get(user_id)
+    for workout in user.workouts:
+        for log in workout.logs:
+            user_exercise_set.add(log.exercise.id)
+            
+    user_exercise_list= []
+    for item in user_exercise_set:
+        exercise=Exercise.query.get(item)
+        user_exercise_list.append({'exercise_id': item, 'exercise_name': exercise.exercise_name})
+    return user_exercise_list        
+        
+            
+            
+    
+    
+
+def get_log_by_exercise_id(exercise_id, user_id):
+    """ return the logs for user that contain that exercise"""
+    # take all the logs with that exercise in it
+    logs = Log.query.filter_by(exercise_id=exercise_id).all()
+    user_logs = []
+    # take all the workouts those logs
+    for log in logs:
+        # get the workout ids
+        workout_id = log.workout_id
+        workout = Workout.query.filter_by(workout_id=workout_id, user_id=user_id).all()
+        if workout:
+            user_logs.append(log)
+    return user_logs

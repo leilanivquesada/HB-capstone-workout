@@ -2,14 +2,13 @@
 {% block title %}Body{% endblock %}
 
 {% block body %}
-<h1>What muscle group would you like to work out today?</h1>
+<h1>What muscle group would you like to work out?</h1>
     {% for muscle in muscles['results'] %}
-        
+    <div class="muscle-container">
         <div class="muscle-{{muscle['id']}}">
-            <a href="/exercise_details/{{muscle['id']}}" class="muscle_id" id={{muscle['id']}}>{{muscle['name']}}<a></p>
-                <p><em>{{muscle['name_en']}}</em></p>
+            <a href="/exercise_details/{{muscle['id']}}" class="muscle_id" id={{muscle['id']}}><h3>{{muscle['name']}}</h3><a><br><em>{{muscle['name_en']}}</em></p>
         </div>
-
+    </div>
     {% endfor %}
 
 
