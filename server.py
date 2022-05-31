@@ -215,14 +215,8 @@ def display_user_dashboard():
     """display user dashboard"""
     #TODO need to make a chart in JS Chart
     #TODO need to display lists of workouts
-        # Pull random bodybuilding quote from API to greet user at user_dashboard
     user_id = session["user_id"]
     user = crud.get_by_user_id(user_id)
-    
-    # total_workouts = crud.get_all_workouts_by_user_id(user_id).count()
-    #TODO: use total_workouts on dashboard to show how many scheduled workouts the user has done
-    #TODO: look for total_workouts where reps or weight is not null. 
-    # populate the form
     
     user_exercise_info = dict()
     #get all user workouts
@@ -244,54 +238,6 @@ def display_user_dashboard():
     
     #get information for the chart
     data_to_chart = dict()
-    #get the name and id of the exercise from the drop down
-    #query the exercise id against logs
-    #TODO get info from the form. query all logs. get the max number per day.
-    #exercise_id(get this from the form) = form.get.(get this info from the form)
-    #logs = crud.get_log_by_exercise_id(exercise_id)
-    #TODO: loop through the logs to get the workout ids associated. GET THE DATE
-    #for workout in logs
-    #TODO: HERE IS THE PERSONAL RECORD
-    #personal_record = max(log.weight)
-    #TODO: Get the max per day and the day to be charted
-    #get max per day
-    #get max per workout_id, 
-    # select DISTINCT(e.exercise_name), 
-    # e.exercise_id from exercises join on e.exercise_id = l.exercise_id, 
-    #     join on w.workout_id = l.workout_id
-    #         where w.user_id = INPUT
-            
-    # SELECT e.exercise_name, e.id 
-    #     FROM Exercise AS e 
-    #     JOIN Log AS l ON e.id = l.exercise_id 
-    #     JOIN Workout AS w ON w.workout_id = l.workout_id 
-    #     WHERE w.user_id = {{INPUT USER}} 
-    #     GROUP BY e.exercise_name
-    # user_id = 
-    # stmt = (
-        # Exercise.query.join(Log.exercise).join(Workout.logs).filter(Workout.user_id==1)
-    # )
-    # print(stmt)
-    #query = text("""SELECT e.exercise_name, e.id FROM Exercise AS e JOIN Log AS l ON e.id = l.exercise_id JOIN Workout AS w ON w.workout_id = l.workout_id GROUP BY e.exercise_name""")
-    
-    user_exercises = db.session.query()
-    
-    # e.exercise_id -> log.exercise_id
-    # workout_id -> log.workout_id
-    # workout.user_id -> CHOSEN USER
-    
-    # where user_id = user_id
-    # w.user_id (from WORKOUT) = input(user_id)
-    # DISTINCT, 
-    
-    
-    #drop down menu, which will be populated by a list of all exercises the USER has done
-    #all exercises will be distinct (no duplicate exercise name in table)
-    
-    #join 
-    
-    
-    # get info from the form 
     
     
     # url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
@@ -310,16 +256,15 @@ def display_user_dashboard():
     # return render_template("/user_dashboard.html", bb_data=bb_data)
     return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_max_weight=user_max_weight, workout_count=workout_count, user_exercise_list=user_exercise_list)
 
-#TODO: VIEW/GET: view all exercises in a given workout when workout is clicked (view Logs)
-#TODO: VIEW all workouts for user in a list
   
    
 # @app.route('/workout_log')
 # def update_log():
-    
+@app.errorhandler(500)
+def not_found(e):
+    return render_template('500.html', msg=e), 500
 
 
-#made but not in use
 @app.errorhandler(404)
 def not_found(e):
     return render_template('404.html', msg=e), 404
@@ -389,4 +334,4 @@ def logout():
 if __name__ == "__main__":
     # DebugToolbarExtension(app)
     connect_to_db(app)
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", debug=False)
