@@ -165,21 +165,23 @@ def get_user_distinct_exercise_list(user_id):
         user_exercise_list.append({'exercise_id': item, 'exercise_name': exercise.exercise_name})
     return user_exercise_list        
         
-            
-            
-    
-    
 
-def get_log_by_exercise_id(exercise_id, user_id):
+            
+    
+""" After the user selects an exercise, get all the user logs associated with that exercise"""    
+
+def get_user_logs_by_exercise_id(exercise_id, user_id):
     """ return the logs for user that contain that exercise"""
     # take all the logs with that exercise in it
     logs = Log.query.filter_by(exercise_id=exercise_id).all()
     user_logs = []
-    # take all the workouts those logs
+    # take all the workouts from those logs
     for log in logs:
         # get the workout ids
         workout_id = log.workout_id
+        # filter by your user
         workout = Workout.query.filter_by(workout_id=workout_id, user_id=user_id).all()
         if workout:
             user_logs.append(log)
-    return user_logs
+    # take the user_logs and 
+    

@@ -17,7 +17,8 @@
     
     {% for log in full_workout_log %}
     <div>
-        <div id="div-{{log['log_id']}}">    
+        <div id="div-{{log['log_id']}}">
+            <div class="status-{{log['log_id']}}"><span class="status-{{log['log_id']}}" id="status-{{log['log_id']}}"></span></div>
             <div id="{{log['log_id']}}" class="update-log-exercise">
                 {#<a href="/show_description">#}
                     {{log['exercise_name']}}{#</a>#}
@@ -34,8 +35,9 @@
                 <button class="update-log" id="{{log['log_id']}}">Update log</button>
                 <button class="delete-log" id="{{log['log_id']}}">Delete</button>
             </div>
+            
         </div>
-        <span class="status" id="status-{{log['log_id']}}"></span>
+        
     </div>
     <div></div>
     <br>

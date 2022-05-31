@@ -57,7 +57,8 @@ for (const button of editButtons) {
       console.log(log_update_inputs)
       if (response.ok) {
         console.log("updated")
-        document.querySelector(`span.status-${logId}`).innerHTML = "Log updated!"
+        alert("Updated!")
+        // document.querySelector(`span.status-${logId}`).innerHTML = "Log updated!"
       } else {
         console.log(response)
         document.querySelector(`span.status-${logId}`).innerHTML = "Log not updated!"
