@@ -209,6 +209,17 @@ def delete_exercise_log():
     flash("Log deleted!", 'alert alert-success')
     return redirect('/update_workout_log')    
     
+ 
+@app.route('/chart_data', methods=["POST"])
+def display_chart_data():
+    """for JS chart in dashboard"""
+    user_id=session["user_id"]
+    exercise_id = request.json.get("exercise_id")
+    user_logs_dict=crud.get_user_max_weights_by_ex_id(exercise_id, user_id)
+    print("YOUOYOUOYOOYOYOYOYOOYLOOKIEOVERHERE")
+    print(user_logs_dict)
+    return user_logs_dict
+ 
     
 @app.route('/user_dashboard')
 def display_user_dashboard():
@@ -217,8 +228,6 @@ def display_user_dashboard():
     #TODO need to display lists of workouts
     user_id = session["user_id"]
     user = crud.get_by_user_id(user_id)
-    
-    user_exercise_info = dict()
     #get all user workouts
     #DASHBOARD item: total number of workouts
     workouts = crud.get_all_workouts_by_user_id(user_id)
@@ -228,7 +237,9 @@ def display_user_dashboard():
     
     #DASHBOARD item: for drop down chart
     user_exercise_list = crud.get_user_distinct_exercise_list(user_id)
-    
+    # get this from the form
+    # exercise_id = form.request.get()
+   
     
     
     

@@ -2,7 +2,6 @@
 {% block chartScript %}
     {# ChartJS #}
         <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-
 {% endblock chartScript%}
 {% block title %}Exercises Home{% endblock %}
 
@@ -14,41 +13,19 @@
 {# Will have links to navigate around #}
 {# API Bodybuilder quote here #}
 </div>
-<div class="NOT-YET-NAMED" id="workoutChart">
+<div class="NOT-YET-NAMED" id="workoutChart">   
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
 Let's see a chart of your progress! Pick an exercise!</button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
             {% for exercise in user_exercise_list%}
-            <li><button class="dropdown-item" id="chart-{{exercise.exercise_id}}" type="button">{{exercise.exercise_name}}</button></li>
+            <li><button class="dropdown-item" id="{{exercise.exercise_id}}" type="button">{{exercise.exercise_name}}</button></li>
             {% endfor%}
         </ul>
     </div>
+    <canvas id="test-chart"></canvas>
 </div>
 
-
-
-<div>
-    
-    
-    <canvas id="workout-chart" style="width:100%;max-width:700px"></canvas>
-
-</div>
-<div class="personal-overall-max">
-    <div class="wordart blues">
-        <span class="text">{{workout_count}}
-         </span>
-    </div>
-    <br>
-    workout(s) recorded so far!
-</div>
-<div class="personal-overall-max">
-    The highest weight you've logged in in a workout is<br>
-    <div class="wordart blues">
-        <span class="text">{{user_max_weight[0]}} {#{{user_max_weight[1]}}#}lb(s)!
-        </span>
-    </div>
-</div>
 
 
 <div class="container-fluid" id="workout-list">

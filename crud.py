@@ -170,18 +170,27 @@ def get_user_distinct_exercise_list(user_id):
     
 """ After the user selects an exercise, get all the user logs associated with that exercise"""    
 
-def get_user_logs_by_exercise_id(exercise_id, user_id):
+def get_user_max_weights_by_ex_id(exercise_id, user_id):
     """ return the logs for user that contain that exercise"""
     # take all the logs with that exercise in it
     logs = Log.query.filter_by(exercise_id=exercise_id).all()
-    user_logs = []
+    print(logs)
+    user_logs_dict ={}
     # take all the workouts from those logs
     for log in logs:
         # get the workout ids
         workout_id = log.workout_id
         # filter by your user
-        workout = Workout.query.filter_by(workout_id=workout_id, user_id=user_id).all()
+        workout = Workout.query.filter_by(workout_id=workout_id, user_id=user_id).first()
+         
         if workout:
-            user_logs.append(log)
+            if workout_id not in user_logs_dict:
+                user_logs_dict[str(workout.date_of_scheduled_workout)] = log.weight
+            else:
+                if user_logs_dict[str(workout.date_of_scheduled_workout)] < log.weight:
+                    user_logs_dict[str(workout.date_of_scheduled_workout)] = log.weight
+    return user_logs_dict
+        
+
     # take the user_logs and 
     

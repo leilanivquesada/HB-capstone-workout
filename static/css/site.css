@@ -3,8 +3,10 @@
     text-align: right;
     margin: 0px 2px 0px 2px;
     padding: 2px;
-    background: #dbc2cf 
-}
+    background: #dbc2cf;
+    height: 100px;
+    
+}   
 .muscle-container p{
     text-align: center;
 }
@@ -20,6 +22,8 @@
     text-align: center;
     border-radius: 10px;
     position: relative;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+      0 10px 10px rgba(0,0,0,0.22);
 }
 
 .nav-link {
@@ -137,7 +141,7 @@ a {
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background: #466362;
+    background-image: linear-gradient(to right, #9fa2b2, #3c7a89);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -190,6 +194,9 @@ p {
     margin: 20px 0 30px;
 }
 
+#test-chart {
+    background-color: #dbc2cf;
+}
 
 span.status {
     font-size: 12px;
