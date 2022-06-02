@@ -216,41 +216,18 @@ def display_chart_data():
     user_id=session["user_id"]
     exercise_id = request.json.get("exercise_id")
     user_logs_dict=crud.get_user_max_weights_by_ex_id(exercise_id, user_id)
-    print("YOUOYOUOYOOYOYOYOYOOYLOOKIEOVERHERE")
-    print(user_logs_dict)
     return user_logs_dict
  
     
 @app.route('/user_dashboard')
 def display_user_dashboard():
     """display user dashboard"""
-    #TODO need to make a chart in JS Chart
-    #TODO need to display lists of workouts
     user_id = session["user_id"]
     user = crud.get_by_user_id(user_id)
-    #get all user workouts
-    #DASHBOARD item: total number of workouts
-    workouts = crud.get_all_workouts_by_user_id(user_id)
-    workout_count = len(workouts)
-    #DASHBOARD item: user max weight
-    user_max_weight = crud.get_user_max_weight(user_id)
-    
+      
     #DASHBOARD item: for drop down chart
     user_exercise_list = crud.get_user_distinct_exercise_list(user_id)
-    # get this from the form
-    # exercise_id = form.request.get()
-   
-    
-    
-    
-    #get all user logs
-    #get all exercise names in log
-    #dump the exercise name and exercise id into the user_exercise_info dictionary
-    
-    #get information for the chart
-    data_to_chart = dict()
-    
-    
+        
     # url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
     # headers = {
     # "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
@@ -267,14 +244,9 @@ def display_user_dashboard():
     # return render_template("/user_dashboard.html", bb_data=bb_data)
     return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_max_weight=user_max_weight, workout_count=workout_count, user_exercise_list=user_exercise_list)
 
-  
-   
-# @app.route('/workout_log')
-# def update_log():
 @app.errorhandler(500)
 def not_found(e):
     return render_template('500.html', msg=e), 500
-
 
 @app.errorhandler(404)
 def not_found(e):
@@ -324,7 +296,6 @@ def all_users():
     """"View all users"""
     users = crud.get_all_users()
     return render_template("all_users.html",users=users)
-
 
 @app.route('/view_workout_log')
 def show_users():
