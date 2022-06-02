@@ -135,7 +135,6 @@ def create_log():
 def display_workout_log():
     """View logs scheduled to a workout, allowing users to update each log"""
     
-    # TODO: make a way for the person to add to the log. They can grab from the calendar or click on a link?
     workout_date = session['workout']
     user_id = session["user_id"]
     user_workout = crud.get_user_workout_by_date(workout_date, user_id)
