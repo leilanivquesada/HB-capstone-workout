@@ -5,7 +5,7 @@
     padding: 2px;
     background: #dbc2cf;
     height: 100px;
-    
+
 }   
 .muscle-container p{
     text-align: center;
@@ -194,9 +194,15 @@ p {
     margin: 20px 0 30px;
 }
 
+
+
 #test-chart {
     background-color: #dbc2cf;
 }
+.hidden {
+   display: none;
+}
+/* note: jschart is rendering; if breaks, may want to test or remove .hidden formatting */
 
 span.status {
     font-size: 12px;
