@@ -96,9 +96,6 @@ def view_all_logs():
 def view_all_logs_by_workout(workout_id):
     """view all logs for a user and date"""
     return Log.query.filter_by(workout_id=workout_id).all()
-
-
-    
     
     
 def get_exercise_in_log(log_id):
@@ -113,7 +110,6 @@ def delete_log(log_id):
     db.session.commit()
     return
     
-
 """Muscles CRUD operations"""
 
 def get_exercise_by_muscle_id(muscle_id):
@@ -149,9 +145,6 @@ def get_user_max_weight(user_id):
 
 def get_user_distinct_exercise_list(user_id):
     """get list of distinct exercises that user has done"""
-    # get list of user workouts
-    # get list of logs in each workout
-    # for each log, get exercise name, exercise id
     user_exercise_set = set()
     # user_workouts = 
     user = User.query.get(user_id)
@@ -166,10 +159,7 @@ def get_user_distinct_exercise_list(user_id):
     return user_exercise_list        
         
 
-            
-    
 """ After the user selects an exercise, get all the user logs associated with that exercise"""    
-
 def get_user_max_weights_by_ex_id(exercise_id, user_id):
     """ return the logs for user that contain that exercise"""
     # take all the logs with that exercise in it
@@ -190,7 +180,4 @@ def get_user_max_weights_by_ex_id(exercise_id, user_id):
                 if user_logs_dict[str(workout.date_of_scheduled_workout)] < log.weight:
                     user_logs_dict[str(workout.date_of_scheduled_workout)] = log.weight
     return user_logs_dict
-        
-
-    # take the user_logs and 
     
