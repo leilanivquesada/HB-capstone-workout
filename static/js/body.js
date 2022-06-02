@@ -1,11 +1,4 @@
 'use strict'
-
-// TODO: Create a function that takes in the API and creates the elements needed
-// cross site scripting: BEWAREEEEEE
-// make API request in server
-// results via fetch-get to display info
-// fetch-post to take info to server to create records
-
 // Prevents redirect upon clicking the Schedule Workout Link of Navigation Bar. Calendar form will drop down instead.
 const scheduleWorkout = document.querySelector('#schedule-workout-link');
 scheduleWorkout.addEventListener('click', (evt) => {

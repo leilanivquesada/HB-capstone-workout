@@ -4,12 +4,10 @@
 const viewLinks = document.querySelectorAll('.to-update')
 for (const link of viewLinks) {
   link.addEventListener('click', (evt) => {
-    // prevent page refresh or redirect upon clicking update log button
     evt.preventDefault();
     console.log(evt);
     
     const workout_date={
-      // why is this returning as NULL??? querySelector and getElementById are both showing up as Null
       date_of_scheduled_workout: link.id
     };
     console.log(workout_date_update)
