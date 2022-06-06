@@ -10,10 +10,10 @@
 <div class="container-fluid">
     <h1>{{user.username}}'s Dashboard</h1>
 </div>
-<div class="NOT-YET-NAMED" id="workoutChart">   
+<div class="workout-chart" id="workoutChart">   
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-Let's see a chart of your progress! Pick an exercise!</button>
+View Your Progress by Selecting an Exercise</button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
             {% for exercise in user_exercise_list%}
             <li><button class="dropdown-item" id="{{exercise.exercise_id}}" type="button">{{exercise.exercise_name}}</button></li>
@@ -25,19 +25,34 @@ Let's see a chart of your progress! Pick an exercise!</button>
 
 
 
-<div class="container-fluid" id="workout-list">
+<div>
     <div>
+
+
     </div>
 </div>
 
 <div class="container-fluid" id="container">
     <div class="body-builder-quote">
       <p id="body-builder-quote">
-        "{{ random_quote['text']}}
+        "{{ random_quote['text']}}"
         -{{ random_quote['author']}}
       <p>
     </div>
-  </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        Quote of the Day
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p>{{ random_quote['text']}}</p>
+        <footer class="blockquote-footer">{{ random_quote['author']}}</cite></footer>
+      </blockquote>
+    </div>
+</div>
+
+  
 {% endblock %}
 {% block dashboardJavascript%}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>    

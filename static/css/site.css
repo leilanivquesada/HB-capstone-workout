@@ -52,27 +52,6 @@
     position: relative;
 }
 
-.wordart {
-  font-family: Arial, sans-serif;
-  font-size: 4em;
-  font-weight: bold;
-  position: relative;
-  z-index: 1;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.wordart.blues .text {
-    font-family: Impact, sans-serif;
-    color: #24c0fd;
-    -webkit-text-stroke: 0.01em #0000aa;
-    filter: progid:DXImageTransform.Microsoft.Glow(Color=#0000aa,Strength=1);
-    text-shadow: 0.13em -0.13em 0px #0000aa;
-    letter-spacing: -0.05em;
-}
-
-
 .tab-group {
     margin: 0 auto;
     max-width: 40em;
@@ -89,6 +68,10 @@
     left:0;
     top: 0;
     z-index:-999;
+}
+
+li{
+    list-style: none;
 }
 
 #display-container li{
@@ -125,6 +108,9 @@
     max-height: 50em;
 }
 
+.workout-chart {
+    min-height: 20em;
+} 
 * {
     margin: 0;
     padding: 0;
@@ -141,7 +127,7 @@ a {
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background-image: linear-gradient(to right, #9fa2b2, #3c7a89);
+    /* background-image: linear-gradient(to right, #9fa2b2, #3c7a89); */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -175,6 +161,11 @@ button.ghost {
     border-color: #fff;
 }
 
+/* .card-header{
+    
+    border: 1px solid #9fa2b2;
+} */
+
 .container {
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
@@ -184,6 +175,7 @@ button.ghost {
 h1 {
     font-weight: bold;
     margin:0;
+    text-align: center;
 }
 
 p {
@@ -193,7 +185,6 @@ p {
     letter-spacing: 0.5px;
     margin: 20px 0 30px;
 }
-
 
 
 #test-chart {
@@ -207,6 +198,8 @@ p {
 span.status {
     font-size: 12px;
 }
+
+
 
 .container {
     background: #fff;
@@ -230,6 +223,15 @@ span.status {
     max-width: 100%;
     min-height: 480px;
 }
+
+h5{
+    border:#234756;
+
+}
+
+
+
+
 
 /* move colored overlay right (sign in) */
 .log-container.right-panel-active .sign-in-container {

@@ -140,7 +140,7 @@ def display_workout_log():
     user_workout = crud.get_user_workout_by_date(workout_date, user_id)
     
     if not user_workout:
-        flash('Select the workout date to log first!', 'alert alert-danger')
+        flash('Select the workout date from the calendar first!', 'alert alert-danger')
         return redirect('/user_dashboard')
     
     workout_id = user_workout.workout_id
@@ -241,7 +241,7 @@ def display_user_dashboard():
     random_quote=all_quotes[random.randint(0,length_to_index)]
     
     # return render_template("/user_dashboard.html", bb_data=bb_data)
-    return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_max_weight=user_max_weight, workout_count=workout_count, user_exercise_list=user_exercise_list)
+    return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_exercise_list=user_exercise_list)
 
 @app.errorhandler(500)
 def not_found(e):
