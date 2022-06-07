@@ -20,16 +20,16 @@
         <div class="row">
             {% for muscle in details %}  
             <div class="col-sm">
-                <div class="card">
+                <a href="/exercise_details/{{muscle['id']}}" class="muscle_id card" id={{muscle['id']}}>
                     <div class="card-header">
-                        <a href="/exercise_details/{{muscle['id']}}" class="muscle_id" id={{muscle['id']}}>{{muscle['name']}}</a>
+                        {{muscle['name']}}
                     </div>
                     <div class="card-body">
                     <blockquote class="blockquote mb-0">
                         <p>{{muscle['name_en'] or " -  "}}</p>
                     </blockquote>
                     </div>
-                </div>
+                </a>
             </div>
             {%endfor%}
         </div>
