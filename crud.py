@@ -65,7 +65,7 @@ def get_all_workouts_by_id(workout_id):
 
 def get_all_workouts_by_user_id(user_id):
     """get all workouts for a particular user"""
-    return Workout.query.filter_by(user_id=user_id).all()
+    return Workout.query.filter_by(user_id=user_id).order_by(Workout.date_of_scheduled_workout.desc()).all()
 
 def get_user_workout_by_date(date_of_scheduled_workout, user_id):
     """get workout for user on scheduled date"""

@@ -19,20 +19,7 @@
     
   </head>
   <body>
-    <div class="title"><p /></div>
-    <div class="flash-messages">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class=flashes>
-          {% for category, message in messages %}
-            <div class="{{category}}" role="alert">
-              {{ message }}
-            </div>
-          {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %}
-    </div>
+    
 
     <div class="container-fluid">
       <div class="nav-bar">
@@ -70,7 +57,21 @@
                 <p><input type="submit"></p>
             </form>
         </div>
-        
+    </div>
+    <div><p /></div>
+
+    <div class="flash-messages">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class=flashes>
+          {% for category, message in messages %}
+            <div class="{{category}}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
     </div>
   {% block body %}  
   {% endblock %}
@@ -80,8 +81,6 @@
   {% block dashboardJavascript%}
   {% endblock %}
   {% block js %}
-  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@16/umg/react-dom.development.js"></script>
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0.babel.js"></script>
     
   <script src="/static/js/body.js"> </script>

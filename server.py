@@ -18,8 +18,8 @@ app = Flask(__name__)
 app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
-# BB_QUOTES_API_KEY = os.environ['BB_QUOTES_API_KEY']
 WGER_API_KEY = os.environ['WGER_API_KEY']
+HEALTH_NEWS_API_KEY = os.environ['HEALTH_NEWS_API_KEY']
 
 
 @app.route('/')
@@ -226,22 +226,22 @@ def display_user_dashboard():
       
     #DASHBOARD item: for drop down chart
     user_exercise_list = crud.get_user_distinct_exercise_list(user_id)
-        
-    # url = 'https://bodybuilding-quotes1.p.rapidapi.com/random-quote'
-    # headers = {
-    # "X-RapidAPI-Host": "bodybuilding-quotes1.p.rapidapi.com",
-    # "X-RapidAPI-Key": BB_QUOTES_API_KEY
-    # }
-    # bb_quote_response = requests.request("GET", url, headers=headers)
-    # bb_data = bb_quote_response.json()
+    
+    #random inspirational quote
     url = 'https://type.fit/api/quotes'
     inspirational_quote_response = requests.request("GET", url)
     all_quotes = inspirational_quote_response.json()
     length_to_index = len(all_quotes) - 1
     random_quote=all_quotes[random.randint(0,length_to_index)]
     
+    #health news
+    news_url = (f'https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey={HEALTH_NEWS_API_KEY}')
+    news_response = requests.get(news_url)
+    news = news_response.json()
+
+    
     # return render_template("/user_dashboard.html", bb_data=bb_data)
-    return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_exercise_list=user_exercise_list)
+    return render_template("/user_dashboard.html", user=user, random_quote=random_quote, user_exercise_list=user_exercise_list, news=news)
 
 @app.errorhandler(500)
 def not_found(e):
@@ -301,7 +301,8 @@ def show_users():
     """Show details on a particular user"""
     user_id = session["user_id"]
     user = crud.get_by_user_id(user_id)
-    return render_template("user_details.html",user=user)
+    user_workouts = crud.get_all_workouts_by_user_id(user_id)
+    return render_template("user_details.html",user_workouts=user_workouts, user=user)
     
 @app.route("/logout")
 def logout():
@@ -315,4 +316,4 @@ def logout():
 if __name__ == "__main__":
     # DebugToolbarExtension(app)
     connect_to_db(app)
-    app.run(host="0.0.0.0", debug=False)
+    app.run(host="0.0.0.0", debug=True)

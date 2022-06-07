@@ -2,24 +2,30 @@
 {% block title %}User Details{% endblock %}
 
 {% block body %}
-<h1>{{user.username}}'s Workouts</h1>
-<ul id="display-container">
-    {% for workout in user.workouts %}
-        <li id="display-log">
-            {#<a href="/update_workout_log" class="to-update" id="{{workout.date_of_scheduled_workout}}">#}
-                <h3>{{ workout.date_of_scheduled_workout}}</h3>
-            {#</a>#}
-            <ul>
-            {% for log in workout.logs%}
-                <li><b>{{log.exercise.exercise_name}}</b>
-                    <ul>
-                        <li> reps: {{log.num_reps}}, weight: {{log.weight}}, unit: {{log.weight_unit}}</li>
-                    </ul>
-            {% endfor %}
-            </ul>
-           
-            
-        </li>
-    {% endfor %}
+<div>
+    <p />
+</div>
+<div class="container">
+    <h1>{{user.username}}'s Workouts</h1>
+    <br>
+    <ul id="display-container">
+        {% for workout in user_workouts %}
+            <li id="display-log">
+                {#<a href="/update_workout_log" class="to-update" id="{{workout.date_of_scheduled_workout}}">#}
+                    <h3>{{ workout.date_of_scheduled_workout}}</h3>
+                {#</a>#}
+                <ul>
+                {% for log in workout.logs%}
+                    <li><b>{{log.exercise.exercise_name}}</b>
+                        <ul>
+                            <li> reps: {{log.num_reps}}, weight: {{log.weight}}, unit: {{log.weight_unit}}</li>
+                        </ul>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
     </ul>
+</div>
 {% endblock %}
+
+
