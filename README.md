@@ -1,33 +1,43 @@
-## Sprint 1: Part 1 -- Project Update
+## Workout Planner App
 
-### I have completed my MVP (yes/no):
-no
-### I have completed these features for my MVP:
-CRUD operations completed
-database model completed
+This is a tool for planning and tracking strength building workouts. 
 
-### This coming week, I plan to work on:
-finish pulling data from API to JSON
-seed database
-flask templates
-design and create basic dashboard with JS chart
-create tests
+A user can log in to the site, schedule workouts, plan exercise routine based on desired muscle group focus, and log reps, weights and weight unit for each exercise set. In addition, a user can view their previously scheduled and recorded workouts. 
 
-### My general work plan/estimate for the rest of Sprint 1:
-I have a lot of work to do this week! 
+### Installation
+Requires PostgreSQL
+createdb users
+git clone this repository
+
+### Get your own API keys!
+NewsAPI: https://newsapi.org/
+Wger Workout Manager: https://wger.de/en/software/api
+
+### Tech Stack
+Python
+SQLAlchemy
+PostgreSQL
+flask
+jinja2
+JavaScipt
+Ajax
+Bootstrap
+HTML
+CSS
+
+### Features
+The user dashboard features a graph that dynamically generates based on the user's exercise history. A user may select an exercise that they have previously scheduled, generating a line chart visualizing their strength progression over time.
+
+The dashboard includes 3 cards for the most recent health and fitness news from NewsAPI.
+
+The dashboard includes 1 random inspirational quote from FreeCodeCamp's inspirational quote API. A key is not needed to make a call to this API.
 
 
-<!-- add instructions for folks to access API keys for themselves to make work. what files should look like -->
+### For Version 2.0
+Additional charts: more data visualization of user workout information; a github style grid to capture days worked out vs days not, for example. Additional formatting to existing chart to be even more dynamic. 
 
-## Sprint 1: Part 2 -- Project Update
-I have completed my MVP (yes/no):
-no
+Additional User Control: add user ability to create and select their own exercises. Currently, exercises on the web application are called from the WGER Workout Manager API and are generally limited to strength training exercises. 
 
-### I have completed these features for my MVP:
-create user log in log out view exercises from api by main muscle view all exercises from api
+User Social Network: ability for users to add friends from Users and share workouts and exercises. 
 
-### For the first half of Sprint 2, I plan to work on:
-react- finish creating workout schedule form that will create records in workout db react- add buttons to exercises to add to scheduled workout
-
-### My general work plan/estimate for Sprint 2 is:
-living in the queue. day 1: workout schedule and calendar day 2: buttons to add exercise to scheduled workout (new log), view workouts (see logs) day 3: update logs day 4: populate the user dashboard- JS Charts day 5: JS Charts
+Password Hashing: passwords will be hashed before saving. 
