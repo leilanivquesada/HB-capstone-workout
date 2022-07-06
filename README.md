@@ -50,4 +50,17 @@ Password Hashing: passwords will be hashed before saving.
 
 Images: The project could use more images and videos, to support informing the user how to perform the different exercises, for example.
 
-Single Page Application: 
+![Screen Shot 2022-07-05 at 11 08 55 PM](https://user-images.githubusercontent.com/62270422/177480895-d8030e42-d221-41a9-84fc-d6b7c55a9e91.png)
+![Screen Shot 2022-07-05 at 11 09 35 PM](https://user-images.githubusercontent.com/62270422/177480927-e7b83bb9-a253-4c28-86f8-7a0083fd8987.png)
+![Screen Shot 2022-07-05 at 11 12 02 PM](https://user-images.githubusercontent.com/62270422/177481139-cbe71ec0-2ab8-478f-9d72-412e3ca4f3b7.png)
+![Screen Shot 2022-07-05 at 11 12 46 PM](https://user-images.githubusercontent.com/62270422/177481259-bb8673e3-decf-484c-bc6c-f657c633e102.png)
+![Screen Shot 2022-07-05 at 11 13 23 PM](https://user-images.githubusercontent.com/62270422/177481354-bf3a331f-aebf-4367-8ea4-3d11e2a8b7b6.png)
+![Screen Shot 2022-07-05 at 11 13 35 PM](https://user-images.githubusercontent.com/62270422/177481378-09f5f7fe-e952-485b-8058-f32d6fda7fc3.png)
+
+404 Not Found Error Screen:
+![Screen Shot 2022-07-05 at 11 14 55 PM](https://user-images.githubusercontent.com/62270422/177481588-32bde1a9-b2de-4615-803d-15320929c53c.png)
+
+500 Internal Error Screen:
+![Screen Shot 2022-07-05 at 11 11 01 PM](https://user-images.githubusercontent.com/62270422/177481022-ec8c1e1b-d13a-4c3e-a295-8484368b8684.png)
+
+
