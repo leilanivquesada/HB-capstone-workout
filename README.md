@@ -11,20 +11,19 @@ git clone this repository
 
 ### Get your own API keys!
 NewsAPI: https://newsapi.org/ 
-
 Wger Workout Manager: https://wger.de/en/software/api
 
 ### Tech Stack
-Python
-SQLAlchemy
-PostgreSQL
-flask
-jinja2
-JavaScipt
-Ajax
-Bootstrap
-HTML
-CSS
+Python 
+SQLAlchemy 
+PostgreSQL 
+flask 
+jinja2 
+JavaScipt 
+Ajax 
+Bootstrap 
+HTML 
+CSS 
 
 ### Features
 The user dashboard features a graph that dynamically generates based on the user's exercise history. A user may select an exercise that they have previously scheduled, generating a line chart visualizing their strength progression over time.
