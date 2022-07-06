@@ -10,7 +10,7 @@ createdb users
 git clone this repository
 
 ### Get your own API keys!
-NewsAPI: https://newsapi.org/ 
+NewsAPI: https://newsapi.org/ <br>
 Wger Workout Manager: https://wger.de/en/software/api
 
 ### Tech Stack
