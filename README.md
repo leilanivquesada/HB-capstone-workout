@@ -5,9 +5,15 @@ This is a tool for planning and tracking strength building workouts.
 A user can log in to the site, schedule workouts, plan exercise routine based on desired muscle group focus, and log reps, weights and weight unit for each exercise set. In addition, a user can view their previously scheduled and recorded workouts. 
 
 ### Installation
-Requires PostgreSQL
-createdb users
-git clone this repository
+<ul>
+  <li>$virtualenv env</li>
+  <li>$source env/bin/activate</li>
+  <li>$pip3 install -r requirements</li>
+  <li>Get your own API keys for APIs referenced below and add them to your own secrets.sh file</li>
+  <li>$source secrets.sh</li>
+  <li>$createdb users</li>
+  <li>$python3 server.py</li>
+</ul>
 
 ### Get your own API keys!
 NewsAPI: https://newsapi.org/ <br>
