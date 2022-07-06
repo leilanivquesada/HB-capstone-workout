@@ -14,15 +14,15 @@ NewsAPI: https://newsapi.org/
 Wger Workout Manager: https://wger.de/en/software/api
 
 ### Tech Stack
-Python 
-SQLAlchemy 
-PostgreSQL 
-flask 
-jinja2 
-JavaScipt 
-Ajax 
-Bootstrap 
-HTML 
+Python | 
+SQLAlchemy | 
+PostgreSQL |
+flask |
+jinja2 |
+JavaScipt |
+Ajax |
+Bootstrap |
+HTML |
 CSS 
 
 ### Features
