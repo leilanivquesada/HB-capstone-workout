@@ -38,17 +38,7 @@ The dashboard includes 3 cards for the most recent health and fitness news from 
 
 The dashboard includes 1 random inspirational quote from FreeCodeCamp's inspirational quote API. A key is not needed to make a call to this API.
 
-
-### For Version 2.0
-Additional charts: more data visualization of user progress; a github-style grid to capture days worked out vs days not, for example. Additional formatting to existing chart to be even more dynamic. 
-
-Additional User Control: add user ability to create and select their own exercises. This would require a separate table in the application model. Currently, exercises on the web application are called from the WGER Workout Manager API and are generally limited to strength training exercises. 
-
-User Social Network: ability for users to add friends from Users. Ability for users to share workouts and exercises. 
-
-Password Hashing: passwords will be hashed before saving. 
-
-Images: The project could use more images and videos, to support informing the user how to perform the different exercises, for example.
+### How It Looks
 
 ![Screen Shot 2022-07-05 at 11 08 55 PM](https://user-images.githubusercontent.com/62270422/177480895-d8030e42-d221-41a9-84fc-d6b7c55a9e91.png)
 ![Screen Shot 2022-07-05 at 11 09 35 PM](https://user-images.githubusercontent.com/62270422/177480927-e7b83bb9-a253-4c28-86f8-7a0083fd8987.png)
@@ -63,4 +53,15 @@ Images: The project could use more images and videos, to support informing the u
 500 Internal Error Screen:
 ![Screen Shot 2022-07-05 at 11 11 01 PM](https://user-images.githubusercontent.com/62270422/177481022-ec8c1e1b-d13a-4c3e-a295-8484368b8684.png)
 
+
+### For Version 2.0
+Additional charts: more data visualization of user progress; a github-style grid to capture days worked out vs days not, for example. Additional formatting to existing chart to be even more dynamic. 
+
+Additional User Control: add user ability to create and select their own exercises. This would require a separate table in the application model. Currently, exercises on the web application are called from the WGER Workout Manager API and are generally limited to strength training exercises. 
+
+User Social Network: ability for users to add friends from Users. Ability for users to share workouts and exercises. 
+
+Password Hashing: passwords will be hashed before saving. 
+
+Images: The project could use more images and videos, to support informing the user how to perform the different exercises, for example.
 
